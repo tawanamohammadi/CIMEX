@@ -137,14 +137,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ needs.prepare.outputs.image_prefix }}-panel
           tags: |
-            type=raw,value=tst,enable=${{ github.ref == 'refs/heads/tst' }}
-            type=ref,event=branch,enable=${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tst' }}
+            type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}},enable=${{ github.ref_type == 'tag' && needs.prepare.outputs.has_version == 'true' }}
-            type=semver,pattern={{major}}.{{minor}},enable=${{ github.ref_type == 'tag' && needs.prepare.outputs.has_version == 'true' }}
-            type=raw,value=${{ needs.prepare.outputs.version }},enable=${{ needs.prepare.outputs.has_version == 'true' && needs.prepare.outputs.version != 'latest' && github.ref != 'refs/heads/tst' && (github.ref == 'refs/heads/main' || github.ref_type == 'tag') }}
-            type=sha,enable=${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tst' }}
-            type=raw,value=latest,enable=${{ needs.prepare.outputs.should_tag_latest == 'true' && github.ref != 'refs/heads/tst' }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push panel image
         uses: docker/build-push-action@v5
@@ -190,14 +187,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ needs.prepare.outputs.image_prefix }}-node
           tags: |
-            type=raw,value=tst,enable=${{ github.ref == 'refs/heads/tst' }}
-            type=ref,event=branch,enable=${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tst' }}
+            type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}},enable=${{ github.ref_type == 'tag' && needs.prepare.outputs.has_version == 'true' }}
-            type=semver,pattern={{major}}.{{minor}},enable=${{ github.ref_type == 'tag' && needs.prepare.outputs.has_version == 'true' }}
-            type=raw,value=${{ needs.prepare.outputs.version }},enable=${{ needs.prepare.outputs.has_version == 'true' && needs.prepare.outputs.version != 'latest' && github.ref != 'refs/heads/tst' && (github.ref == 'refs/heads/main' || github.ref_type == 'tag') }}
-            type=sha,enable=${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tst' }}
-            type=raw,value=latest,enable=${{ needs.prepare.outputs.should_tag_latest == 'true' && github.ref != 'refs/heads/tst' }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push node image
         uses: docker/build-push-action@v5
