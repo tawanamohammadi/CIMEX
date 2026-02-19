@@ -144,12 +144,12 @@ const getBackhaulDisplayInfo = (spec: Record<string, any> | undefined): Backhaul
     spec.listen_port ||
     (Array.isArray(spec.ports) && spec.ports.length > 0
       ? (() => {
-          const [first] = spec.ports
-          if (typeof first !== 'string') return undefined
-          const [left] = first.split('=')
-          const parts = left.split(':')
-          return parts.pop()
-        })()
+        const [first] = spec.ports
+        if (typeof first !== 'string') return undefined
+        const [left] = first.split('=')
+        const parts = left.split(':')
+        return parts.pop()
+      })()
       : undefined) ||
     'N/A'
 
@@ -157,11 +157,11 @@ const getBackhaulDisplayInfo = (spec: Record<string, any> | undefined): Backhaul
     spec.target_addr ||
     (Array.isArray(spec.ports) && spec.ports.length > 0
       ? (() => {
-          const [first] = spec.ports
-          if (typeof first !== 'string') return undefined
-          const segments = first.split('=')
-          return segments.length > 1 ? segments[1] : undefined
-        })()
+        const [first] = spec.ports
+        if (typeof first !== 'string') return undefined
+        const segments = first.split('=')
+        return segments.length > 1 ? segments[1] : undefined
+      })()
       : undefined) ||
     'N/A'
 
@@ -189,7 +189,7 @@ const Tunnels = () => {
       setShowAddModal(true)
       window.history.replaceState({}, '', '/tunnels')
     }
-    
+
   }, [])
 
   const fetchData = async () => {
@@ -200,10 +200,10 @@ const Tunnels = () => {
       ])
       setTunnels(tunnelsRes.data)
       // Filter nodes: iran nodes and foreign servers
-      const iranNodes = nodesRes.data.filter((node: any) => 
+      const iranNodes = nodesRes.data.filter((node: any) =>
         node.metadata?.role === 'iran' || !node.metadata?.role  // Default to iran for backward compatibility
       )
-      const foreignServers = nodesRes.data.filter((node: any) => 
+      const foreignServers = nodesRes.data.filter((node: any) =>
         node.metadata?.role === 'foreign'
       )
       setNodes(iranNodes)
@@ -217,7 +217,7 @@ const Tunnels = () => {
 
   const deleteTunnel = async (id: string) => {
     if (!confirm('Are you sure you want to delete this tunnel?')) return
-    
+
     try {
       await api.delete(`/tunnels/${id}`)
       fetchData()
@@ -244,7 +244,7 @@ const Tunnels = () => {
 
   const handleReapplyAll = async () => {
     if (!confirm(t.tunnels.confirmReapplyAll || 'Are you sure you want to reapply all tunnels?')) return
-    
+
     setReapplyingAll(true)
     try {
       const response = await api.post('/tunnels/reapply-all')
@@ -267,8 +267,11 @@ const Tunnels = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mb-4"></div>
-          <p className="text-gray-500 dark:text-gray-400">{t.tunnels.loadingTunnels}</p>
+          <div className="relative inline-block mb-4">
+            <div className="absolute inset-0 bg-yellow-500/20 rounded-full blur-xl animate-pulse"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-t-2 border-yellow-400 relative z-10"></div>
+          </div>
+          <p className="text-gray-400 uppercase tracking-[0.2em] text-sm font-bold glow-yellow/50">{t.tunnels.loadingTunnels}</p>
         </div>
       </div>
     )
@@ -276,26 +279,30 @@ const Tunnels = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8 bg-black/20 p-6 rounded-2xl border border-white/5 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10 blur-xl"></div>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t.tunnels.title}</h1>
-          <p className="text-gray-500 dark:text-gray-400">{t.tunnels.subtitle}</p>
+          <h1 className="text-3xl font-black text-white tracking-tight uppercase gradient-text drop-shadow-sm mb-1">{t.tunnels.title}</h1>
+          <p className="text-gray-400 text-sm font-medium tracking-wide">{t.tunnels.subtitle}</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
           <button
             onClick={handleReapplyAll}
             disabled={reapplyingAll}
-            className="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative overflow-hidden px-5 py-2.5 rounded-xl font-bold bg-white/5 border border-white/10 hover:border-emerald-400/50 transition-all text-gray-300 hover:text-white flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <RotateCw size={20} className={reapplyingAll ? "animate-spin" : ""} />
-            {t.tunnels.reapplyAll}
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <RotateCw size={18} className={`relative z-10 ${reapplyingAll ? "animate-spin" : ""}`} />
+            <span className="relative z-10">{t.tunnels.reapplyAll}</span>
           </button>
+
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md flex items-center gap-2"
+            className="group relative overflow-hidden px-5 py-2.5 rounded-xl font-bold bg-white text-black hover:scale-[0.98] transition-all flex items-center gap-2"
           >
-            <Plus size={20} />
-            {t.tunnels.createTunnel}
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+            <Plus size={18} className="relative z-10" />
+            <span className="relative z-10">{t.tunnels.createTunnel}</span>
           </button>
         </div>
       </div>
@@ -351,13 +358,12 @@ const Tunnels = () => {
                 <div className="flex items-start gap-4 flex-1 min-w-0">
                   {/* Status Badge */}
                   <span
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 ${
-                      tunnel.status === 'active'
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 ${tunnel.status === 'active'
                         ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
                         : tunnel.status === 'error'
-                        ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                    }`}
+                          ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                      }`}
                   >
                     {tunnel.status}
                   </span>
@@ -381,9 +387,9 @@ const Tunnels = () => {
                         } else if (tunnel.type && tunnel.type.toLowerCase() !== tunnel.core.toLowerCase()) {
                           transmissionType = tunnel.type.toUpperCase()
                         }
-                        
+
                         if (!transmissionType) return null
-                        
+
                         const getTransmissionBadge = () => {
                           const typeColors: Record<string, { bg: string; text: string; border: string }> = {
                             TCP: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-800 dark:text-green-200', border: 'border-green-300 dark:border-green-700' },
@@ -395,7 +401,7 @@ const Tunnels = () => {
                           }
                           return typeColors[transmissionType] || { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-800 dark:text-gray-200', border: 'border-gray-300 dark:border-gray-600' }
                         }
-                        
+
                         const transmissionBadge = getTransmissionBadge()
                         return (
                           <span
@@ -535,7 +541,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
   const forwardToParsed = tunnel.spec?.forward_to ? parseAddressPort(tunnel.spec.forward_to) : null
   const remoteIp = tunnel.spec?.remote_ip || forwardToParsed?.host || '127.0.0.1'
   const remotePort = tunnel.spec?.remote_port || forwardToParsed?.port || 8080
-  
+
   // Parse ports from spec
   const parsePortsFromSpec = (spec: Record<string, any>): string => {
     if (spec?.ports) {
@@ -567,7 +573,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
     // Fallback to single port
     return (spec?.listen_port || spec?.remote_port || 8080).toString()
   }
-  
+
   const [formData, setFormData] = useState({
     name: tunnel.name,
     ports: parsePortsFromSpec(tunnel.spec || {}),
@@ -591,9 +597,9 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
     e.preventDefault()
     try {
       let updatedSpec = { ...tunnel.spec }
-      
+
       const useV4ToV6 = updatedSpec.use_ipv6 || false
-      
+
       // Parse comma-separated ports
       const parsePorts = (portsStr: string): number[] => {
         return portsStr
@@ -603,18 +609,18 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
           .map(p => parseInt(p))
           .filter(p => !isNaN(p) && p > 0 && p <= 65535)
       }
-      
+
       const ports = parsePorts(formData.ports)
       if (ports.length === 0) {
         alert('Please enter at least one valid port')
         return
       }
-      
+
       if (tunnel.core === 'rathole') {
         if (formData.rathole_remote_addr) {
           const remoteHost = window.location.hostname
-          const remotePort = formData.rathole_remote_addr.includes(':') 
-            ? formData.rathole_remote_addr.split(':')[1] 
+          const remotePort = formData.rathole_remote_addr.includes(':')
+            ? formData.rathole_remote_addr.split(':')[1]
             : formData.rathole_remote_addr
           updatedSpec.remote_addr = `${remoteHost}:${remotePort || '23333'}`
         }
@@ -635,7 +641,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
         const firstPort = ports[0]
         updatedSpec.listen_port = firstPort
         updatedSpec.remote_port = firstPort
-        const controlPort = formData.chisel_control_port 
+        const controlPort = formData.chisel_control_port
           ? parseInt(formData.chisel_control_port.toString())
           : firstPort + 10000
         updatedSpec.control_port = controlPort
@@ -731,7 +737,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
               </div>
             </>
           )}
-          
+
           {tunnel.core === 'backhaul' && (
             <BackhaulForm
               state={backhaulState}
@@ -744,7 +750,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
               }
             />
           )}
-          
+
           {tunnel.core === 'rathole' && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -764,7 +770,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
               </p>
             </div>
           )}
-          
+
           {tunnel.core === 'rathole' && (
             <>
               <div>
@@ -804,7 +810,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
               </div>
             </>
           )}
-          
+
           {tunnel.core === 'chisel' && (
             <>
               <div>
@@ -866,7 +872,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
               )}
             </>
           )}
-          
+
           {tunnel.core === 'frp' && (
             <>
               <div className="grid grid-cols-2 gap-4">
@@ -926,7 +932,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
               </div>
             </>
           )}
-          
+
           {/* Node IPv6 address field for Rathole when v4 to v6 is enabled */}
           {tunnel.core === 'rathole' && tunnel.spec?.use_ipv6 && (
             <div>
@@ -947,7 +953,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
               </p>
             </div>
           )}
-          
+
           <div className="flex gap-3 justify-end">
             <button
               type="button"
@@ -1025,9 +1031,9 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
     try {
       let spec = getSpecForType(formData.core, formData.type)
       let tunnelType = formData.type
-      
+
       spec.use_ipv6 = formData.use_ipv6 || false
-      
+
       // Parse comma-separated ports
       const parsePorts = (portsStr: string): number[] => {
         return portsStr
@@ -1037,13 +1043,13 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
           .map(p => parseInt(p))
           .filter(p => !isNaN(p) && p > 0 && p <= 65535)
       }
-      
+
       const ports = parsePorts(formData.ports)
       if (ports.length === 0) {
         alert('Please enter at least one valid port')
         return
       }
-      
+
       if (formData.core === 'gost' && (formData.type === 'tcp' || formData.type === 'udp' || formData.type === 'grpc' || formData.type === 'tcpmux')) {
         const remoteIp = formData.remote_ip || (formData.use_ipv6 ? '::1' : '127.0.0.1')
         // For GOST, ports are equal (listen_port = forward_to port)
@@ -1052,7 +1058,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
         spec.listen_port = ports[0]  // Keep first port for backward compatibility
         spec.remote_port = ports[0]  // Keep first port for backward compatibility
       }
-      
+
       if (formData.core === 'rathole') {
         const remoteHost = window.location.hostname
         const remotePort = formData.rathole_remote_addr || '23333'
@@ -1064,7 +1070,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
         spec.remote_port = ports[0]
         spec.listen_port = ports[0]
       }
-      
+
       if (formData.core === 'chisel') {
         // For Chisel, ports are equal (reverse_port = local_port)
         spec.ports = ports  // Store multiple ports
@@ -1072,14 +1078,14 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
         spec.listen_port = firstPort
         spec.remote_port = firstPort
         spec.server_port = firstPort
-        const controlPort = formData.chisel_control_port 
+        const controlPort = formData.chisel_control_port
           ? parseInt(formData.chisel_control_port.toString())
           : firstPort + 10000
         spec.control_port = controlPort
         const panelHost = typeof window !== 'undefined' ? window.location.hostname : 'localhost'
         spec.panel_host = panelHost
       }
-      
+
       if (formData.core === 'backhaul') {
         if (!formData.node_id) {
           alert('Backhaul tunnels require a node')
@@ -1090,13 +1096,13 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
         // We should use backhaulState.public_port, NOT formData.ports (which is for other cores)
         console.log('Backhaul tunnel creation - formData.ports:', formData.ports, 'type:', typeof formData.ports)
         console.log('Backhaul tunnel creation - backhaulState.public_port:', backhaulState.public_port)
-        
+
         // Use backhaulState.public_port (from BackhaulForm) - it has the correct comma-separated ports
         // Only fallback to formData.ports if backhaulState.public_port is empty
-        const portsToUse = backhaulState.public_port && backhaulState.public_port.trim() 
-          ? backhaulState.public_port 
+        const portsToUse = backhaulState.public_port && backhaulState.public_port.trim()
+          ? backhaulState.public_port
           : (formData.ports || '8080')
-        
+
         const updatedBackhaulState = {
           ...backhaulState,
           public_port: portsToUse,
@@ -1134,7 +1140,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
         }
         tunnelType = backhaulState.transport
       }
-      
+
       if (formData.core === 'frp') {
         if (!formData.node_id) {
           alert('FRP tunnels require a node')
@@ -1153,7 +1159,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
         spec.type = formData.type === 'udp' ? 'udp' : 'tcp'
         tunnelType = formData.type === 'udp' ? 'udp' : 'tcp'
       }
-      
+
       const payload = {
         name: formData.name,
         core: formData.core,
@@ -1371,7 +1377,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
               </div>
             </div>
           )}
-          
+
           {formData.core === 'backhaul' && (
             <BackhaulForm
               state={backhaulState}
@@ -1387,7 +1393,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
               }
             />
           )}
-          
+
           {formData.core === 'rathole' && (
             <>
               <div>
@@ -1411,41 +1417,41 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Rathole Port
-                </label>
-                <input
-                  type="number"
-                  value={formData.rathole_remote_addr}
-                  onChange={(e) =>
-                    setFormData({ ...formData, rathole_remote_addr: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder="23333"
-                  min="1"
-                  max="65535"
-                  required
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Rathole server port on panel (IP: {window.location.hostname})</p>
+                    Rathole Port
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.rathole_remote_addr}
+                    onChange={(e) =>
+                      setFormData({ ...formData, rathole_remote_addr: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                    placeholder="23333"
+                    min="1"
+                    max="65535"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Rathole server port on panel (IP: {window.location.hostname})</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Token (Optional - Auto-generated if empty)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.rathole_token}
+                    onChange={(e) =>
+                      setFormData({ ...formData, rathole_token: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                    placeholder="Leave empty for auto-generation"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Authentication token (will be auto-generated if not provided)</p>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Token (Optional - Auto-generated if empty)
-                </label>
-                <input
-                  type="text"
-                  value={formData.rathole_token}
-                  onChange={(e) =>
-                    setFormData({ ...formData, rathole_token: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder="Leave empty for auto-generation"
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Authentication token (will be auto-generated if not provided)</p>
-              </div>
-            </div>
             </>
           )}
-          
+
           {formData.core === 'chisel' && (
             <>
               <div>
@@ -1487,7 +1493,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
               </div>
             </>
           )}
-          
+
           {formData.core === 'frp' && (
             <>
               <div className="grid grid-cols-2 gap-4">
@@ -1547,7 +1553,7 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
               </div>
             </>
           )}
-          
+
           {/* v4 to v6 tunnel checkbox - only for Rathole, Backhaul, Chisel, FRP (not GOST) */}
           {formData.core !== 'gost' && (
             <>
@@ -2015,9 +2021,9 @@ function buildBackhaulSpec(
   const effectiveControlPort = !Number.isNaN(controlPort) && controlPort > 0
     ? controlPort
     : (!Number.isNaN(publicPort) && publicPort > 0
-        ? publicPort
-        : (!Number.isNaN(targetPort) && targetPort > 0 ? targetPort : 3080))
-  
+      ? publicPort
+      : (!Number.isNaN(targetPort) && targetPort > 0 ? targetPort : 3080))
+
   // Parse comma-separated ports from public_port
   const parsePortsFromString = (portStr: string): number[] => {
     if (!portStr || typeof portStr !== 'string') {
@@ -2033,7 +2039,7 @@ function buildBackhaulSpec(
     console.log('parsePortsFromString: input:', portStr, '-> parsed:', parsed, 'count:', parsed.length)
     return parsed
   }
-  
+
   // CRITICAL: Ensure base.public_port is a string before parsing
   const publicPortStr = String(base.public_port || '')
   console.log('buildBackhaulSpec: base.public_port (raw):', base.public_port, 'type:', typeof base.public_port, '-> string:', publicPortStr)
@@ -2048,11 +2054,11 @@ function buildBackhaulSpec(
 
   // Use customPorts if provided, otherwise build from comma-separated public_port
   let ports: string[] = []
-  
+
   // CRITICAL: Check if customPorts is set AND has content
   // If customPorts is empty or just whitespace, use publicPorts instead
   const hasCustomPorts = advanced.customPorts && advanced.customPorts.trim().length > 0
-  
+
   if (hasCustomPorts) {
     // User manually entered ports in CUSTOM PORTS field
     ports = advanced.customPorts
@@ -2069,12 +2075,12 @@ function buildBackhaulSpec(
     })
     console.log('buildBackhaulSpec: Built ports from publicPorts:', publicPorts, '-> ports:', ports, 'count:', ports.length)
   }
-  
+
   if (ports.length === 0) {
     ports.push(defaultPortEntry)
     console.log('buildBackhaulSpec: No ports found, using default:', defaultPortEntry)
   }
-  
+
   // Final verification - ensure we have ports
   console.log('buildBackhaulSpec: Final ports array:', ports, 'count:', ports.length)
 

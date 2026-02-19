@@ -1,10 +1,8 @@
 import { ReactNode, useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Network, FileText, Activity, Moon, Sun, Github, Menu, X, LogOut, Settings, Heart, Globe, Languages } from 'lucide-react'
+import { LayoutDashboard, Network, FileText, Activity, Moon, Sun, Github, Menu, X, LogOut, Settings, Heart, Globe, Languages, Shield, Zap } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import CimexLogoDark from '../assets/CIMEX_dark.svg'
-import CimexLogoLight from '../assets/CIMEX_light.svg'
 
 interface LayoutProps {
   children: ReactNode
@@ -17,7 +15,7 @@ const Layout = ({ children }: LayoutProps) => {
   const { language, setLanguage, dir, t } = useLanguage()
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode')
-    return saved ? JSON.parse(saved) : false
+    return saved ? JSON.parse(saved) : true
   })
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [version, setVersion] = useState('v0.1.0')
@@ -44,7 +42,7 @@ const Layout = ({ children }: LayoutProps) => {
         }
       })
       .catch(() => {
-        setVersion('v0.1.0')
+        setVersion('v1.0.0')
       })
   }, [])
 
@@ -59,53 +57,80 @@ const Layout = ({ children }: LayoutProps) => {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900" dir="ltr">
-      <div className="flex h-screen">
+    <div className="min-h-screen bg-[#0a0e27] text-white selection:bg-cyan-500/30 selection:text-cyan-200" dir={dir}>
+      {/* Global Background Elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[150px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/10 rounded-full blur-[150px]"></div>
+        <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] bg-pink-600/10 rounded-full blur-[120px]"></div>
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0wIDQwTDUwIDAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==')] opacity-20"></div>
+      </div>
+
+      <div className="flex h-screen relative z-10">
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
-        {/* Sidebar - Always LTR regardless of language */}
+        {/* Sidebar */}
         <aside
           dir="ltr"
-          className={`fixed lg:static inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col z-50 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          className={`fixed lg:static inset-y-0 left-0 w-72 glass-strong border-r border-white/10 flex flex-col z-50 transform transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
             }`}
         >
           {/* Sidebar Header */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-6">
+          <div className="p-6 border-b border-white/5 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="flex items-center justify-between mb-2 relative z-10">
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+                className="lg:hidden p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 transition-colors"
               >
                 <X size={20} />
               </button>
             </div>
-            <div className="flex flex-col items-center gap-4">
+
+            <div className="flex items-center gap-4 relative z-10">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl"></div>
-                <div className="relative h-24 w-24 flex items-center justify-center">
-                  <div className="text-4xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    CIMEX
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-xl blur-md opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative h-12 w-12 bg-black/50 border border-white/10 rounded-xl flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0wIDIwTDIwIDAgSCAyMExgMjAgWiIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPgo8L3N2Zz4=')] opacity-50"></div>
+                  <Shield className="w-6 h-6 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
                 </div>
               </div>
-              <div className="text-center">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">CIMEX</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Control Panel</p>
-                {username && (
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">{username}</p>
-                )}
+              <div>
+                <h1 className="text-2xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 drop-shadow-sm">
+                  CIMEX
+                </h1>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>
+                  <span className="text-[10px] font-mono text-gray-400 tracking-wider uppercase">Nexus Active</span>
+                </div>
               </div>
             </div>
           </div>
 
+          {/* User Profile Mini */}
+          {username && (
+            <div className="px-6 py-4 border-b border-white/5">
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-black/20 border border-white/5">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-inner shadow-white/20">
+                  {username.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <p className="text-sm font-bold text-gray-200 truncate">{username}</p>
+                  <p className="text-[10px] text-cyan-500 font-mono tracking-widest uppercase glow-cyan/20">Admin</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
             {navItems.map((item) => {
               const Icon = item.icon
               const isActive = location.pathname === item.path
@@ -113,100 +138,117 @@ const Layout = ({ children }: LayoutProps) => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${isActive
-                    ? 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                  className={`group relative flex items-center space-x-3 px-4 py-3.5 rounded-xl transition-all duration-300 overflow-hidden ${isActive
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]'
+                    : 'text-gray-400 hover:text-gray-100 hover:bg-white/5 border border-transparent'
                     }`}
                 >
-                  <Icon size={20} className={isActive ? 'text-blue-600 dark:text-blue-400' : ''} />
-                  <span className="font-medium">{item.label}</span>
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-cyan-400 rounded-r-full shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
+                  )}
+                  <Icon size={20} className={`relative z-10 transition-transform duration-300 group-hover:scale-110 ${isActive ? 'text-cyan-400' : ''}`} />
+                  <span className="font-medium tracking-wide relative z-10">{item.label}</span>
+
+                  {isActive && (
+                    <div className="absolute right-4 w-12 h-12 bg-white/5 rounded-full blur-xl"></div>
+                  )}
                 </Link>
               )
             })}
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between px-4 py-2">
-                <button
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-                >
-                  {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                  <span className="text-sm font-medium">{darkMode ? t.navigation.light : t.navigation.dark}</span>
-                </button>
-                <button
-                  onClick={() => setLanguage(language === 'en' ? 'fa' : 'en')}
-                  className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-                  title={language === 'en' ? 'Switch to Farsi' : 'Switch to English'}
-                >
-                  <Languages size={18} />
-                  <span className="text-sm font-medium">{language === 'en' ? 'EN' : 'FA'}</span>
-                </button>
-              </div>
-              <div className="px-4">
-                <button
-                  onClick={() => {
-                    logout()
-                    navigate('/login')
-                  }}
-                  className="w-full flex items-center justify-center gap-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-                >
-                  <LogOut size={18} />
-                  <span className="text-sm font-medium">{t.navigation.logout}</span>
-                </button>
-              </div>
+          <div className="p-4 border-t border-white/5">
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="flex flex-col items-center gap-2 p-3 rounded-xl bg-black/20 border border-white/5 hover:bg-white/10 hover:border-white/20 text-gray-400 hover:text-white transition-all group"
+              >
+                {darkMode ? <Sun size={18} className="group-hover:text-amber-400 transition-colors" /> : <Moon size={18} className="group-hover:text-blue-400 transition-colors" />}
+                <span className="text-[10px] uppercase tracking-wider font-bold">{darkMode ? t.navigation.light : t.navigation.dark}</span>
+              </button>
+              <button
+                onClick={() => setLanguage(language === 'en' ? 'fa' : 'en')}
+                className="flex flex-col items-center gap-2 p-3 rounded-xl bg-black/20 border border-white/5 hover:bg-white/10 hover:border-white/20 text-gray-400 hover:text-white transition-all group"
+              >
+                <Languages size={18} className="group-hover:text-cyan-400 transition-colors" />
+                <span className="text-[10px] uppercase tracking-wider font-bold">{language === 'en' ? 'EN' : 'FA'}</span>
+              </button>
             </div>
-            <div className="flex flex-col items-center gap-2 text-xs text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex items-center gap-1 flex-wrap justify-center">
-                <span>Made with</span>
-                <span className="text-red-500">❤️</span>
-                <span>by</span>
-                <a
-                  href="https://github.com/tawanamohammadi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cyan-600 dark:text-cyan-400 hover:underline"
-                >
-                  Tawana Mohammadi
-                </a>
+
+            <button
+              onClick={() => {
+                logout()
+                navigate('/login')
+              }}
+              className="w-full relative overflow-hidden group flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold bg-black/20 border border-red-500/30 text-red-400 hover:text-white transition-all hover:shadow-[0_0_15px_rgba(2ef,68,68,0.3)]"
+            >
+              <div className="absolute inset-0 bg-red-500/0 group-hover:bg-red-500/20 transition-colors"></div>
+              <LogOut size={18} className="relative z-10" />
+              <span className="text-sm tracking-wider uppercase relative z-10">{t.navigation.logout}</span>
+            </button>
+
+            <div className="mt-6 flex flex-col items-center gap-3 text-xs text-gray-500">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 border border-white/5">
+                <Zap size={12} className="text-yellow-400" />
+                <span className="font-mono text-[10px] tracking-widest">{version}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span>{version}</span>
-                <a
-                  href="https://github.com/tawanamohammadi/CIMEX"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-                  title="GitHub Repository"
-                >
-                  <Github size={14} />
-                </a>
-              </div>
+              <a
+                href="https://github.com/tawanamohammadi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:text-cyan-400 transition-colors"
+                title="GitHub Repository"
+              >
+                <Github size={14} />
+                <span>Tawana Mohammadi</span>
+              </a>
             </div>
           </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900" dir="ltr">
-          {/* Mobile Header */}
-          <div className="lg:hidden sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between shadow-sm">
+        {/* Main Content Area */}
+        <main className="flex-1 flex flex-col min-w-0 bg-black/20 backdrop-blur-sm" dir="ltr">
+          {/* Mobile Topbar */}
+          <div className="lg:hidden sticky top-0 z-30 glass border-b border-white/5 px-4 py-3 flex items-center justify-between">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
+              className="p-2 rounded-xl bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
             >
               <Menu size={24} />
             </button>
-            <h1 className="text-lg font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">CIMEX</h1>
-            <div className="w-10" />
+            <div className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-cyan-400" />
+              <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 tracking-wider">CIMEX</span>
+            </div>
+            <div className="w-10"></div> {/* Spacer for balance */}
           </div>
 
-          <div className="p-4 sm:p-6 lg:p-8">
-            {children}
+          <div className="flex-1 overflow-auto custom-scrollbar p-4 sm:p-6 lg:p-8 relative">
+            <div className="max-w-7xl mx-auto w-full">
+              {children}
+            </div>
           </div>
         </main>
       </div>
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.02);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+      `}</style>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Plus, Copy, Trash2, CheckCircle, XCircle, Download, AlertCircle } from 'lucide-react'
+import { Plus, Copy, Trash2, CheckCircle, XCircle, Download, AlertCircle, Network } from 'lucide-react'
 import api from '../api/client'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -36,7 +36,7 @@ const Nodes = () => {
     try {
       const response = await api.get('/nodes')
       // Filter only iran nodes (exclude foreign servers)
-      const iranNodes = response.data.filter((node: Node) => 
+      const iranNodes = response.data.filter((node: Node) =>
         node.metadata?.role !== 'foreign' && (node.metadata?.role === 'iran' || !node.metadata?.role)
       )
       setNodes(iranNodes)
@@ -100,7 +100,7 @@ const Nodes = () => {
 
   const deleteNode = async (id: string) => {
     if (!confirm('Are you sure you want to delete this node?')) return
-    
+
     try {
       await api.delete(`/nodes/${id}`)
       fetchNodes()
@@ -114,8 +114,11 @@ const Nodes = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mb-4"></div>
-          <p className="text-gray-500 dark:text-gray-400">Loading nodes...</p>
+          <div className="relative inline-block mb-4">
+            <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-t-2 border-blue-400 relative z-10"></div>
+          </div>
+          <p className="text-gray-400 uppercase tracking-[0.2em] text-sm font-bold glow-blue/50">Loading nodes...</p>
         </div>
       </div>
     )
@@ -123,146 +126,144 @@ const Nodes = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8 bg-black/20 p-6 rounded-2xl border border-white/5 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10 blur-xl"></div>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t.nodes.title}</h1>
-          <p className="text-gray-500 dark:text-gray-400">{t.nodes.subtitle}</p>
+          <h1 className="text-3xl font-black text-white tracking-tight uppercase gradient-text drop-shadow-sm mb-1">{t.nodes.title}</h1>
+          <p className="text-gray-400 text-sm font-medium tracking-wide">{t.nodes.subtitle}</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
           <button
             onClick={showCA}
-            className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md flex items-center gap-2"
+            className="group relative overflow-hidden px-5 py-2.5 rounded-xl font-bold bg-white/5 border border-white/10 hover:border-emerald-400/50 transition-all text-gray-300 hover:text-white flex items-center gap-2"
           >
-            <Copy size={18} />
-            {t.nodes.viewCACertificate}
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <Copy size={18} className="relative z-10" />
+            <span className="relative z-10">{t.nodes.viewCACertificate}</span>
           </button>
+
           <button
             onClick={downloadCA}
-            className="px-4 py-2.5 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 font-medium border border-gray-200 dark:border-gray-600 flex items-center gap-2"
+            className="group relative overflow-hidden px-5 py-2.5 rounded-xl font-bold bg-white/5 border border-white/10 hover:border-blue-400/50 transition-all text-gray-300 hover:text-white flex items-center gap-2"
           >
-            <Download size={18} />
-            {t.nodes.downloadCA}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <Download size={18} className="relative z-10" />
+            <span className="relative z-10">{t.nodes.downloadCA}</span>
           </button>
+
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md flex items-center gap-2"
+            className="group relative overflow-hidden px-5 py-2.5 rounded-xl font-bold bg-white text-black hover:scale-[0.98] transition-all flex items-center gap-2"
           >
-            <Plus size={20} />
-            {t.nodes.addNode}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-400 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+            <Plus size={18} className="relative z-10" />
+            <span className="relative z-10">{t.nodes.addNode}</span>
           </button>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
-        <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-600">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Fingerprint
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                IP Address
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Last Seen
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {nodes.map((node) => (
-              <tr key={node.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900 dark:text-white">{node.name}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-2">
-                    <code className="text-sm text-gray-600 dark:text-gray-300 font-mono">{node.fingerprint}</code>
-                    <button
-                      onClick={() => copyToClipboard(node.fingerprint)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-600 dark:text-gray-400"
-                    >
-                      <Copy size={14} />
-                    </button>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {(() => {
-                    const connStatus = node.metadata?.connection_status || 'failed'
-                    const getStatusColor = (status: string) => {
-                      switch (status) {
-                        case 'connected':
-                          return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
-                        case 'connecting':
-                        case 'reconnecting':
-                          return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200'
-                        case 'failed':
-                          return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                        default:
-                          return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                      }
-                    }
-                    const getStatusIcon = (status: string) => {
-                      switch (status) {
-                        case 'connected':
-                          return <CheckCircle size={12} className="text-green-600 dark:text-green-400" />
-                        case 'connecting':
-                        case 'reconnecting':
-                          return <AlertCircle size={12} className="text-yellow-600 dark:text-yellow-400" />
-                        case 'failed':
-                          return <XCircle size={12} className="text-red-600 dark:text-red-400" />
-                        default:
-                          return <XCircle size={12} />
-                      }
-                    }
-                    const getStatusText = (status: string) => {
-                      switch (status) {
-                        case 'connected':
-                          return 'Connected'
-                        case 'connecting':
-                          return 'Connecting'
-                        case 'reconnecting':
-                          return 'Reconnecting'
-                        case 'failed':
-                          return 'Failed'
-                        default:
-                          return status
-                      }
-                    }
-                      return (
-                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(connStatus)}`}>
-                          {getStatusIcon(connStatus)}
-                          {getStatusText(connStatus)}
-                        </span>
-                      )
-                    })()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {node.metadata?.ip_address || 'N/A'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(node.last_seen).toLocaleString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <button
-                    onClick={() => deleteNode(node.id)}
-                    className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </td>
+      <div className="glass rounded-xl border border-white/5 overflow-hidden shadow-2xl relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
+
+        <div className="overflow-x-auto relative z-10">
+          <table className="w-full text-left">
+            <thead className="bg-black/40 border-b border-white/5 text-xs uppercase tracking-wider font-bold text-gray-400">
+              <tr>
+                <th className="px-6 py-4">Name</th>
+                <th className="px-6 py-4">Fingerprint</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">IP Address</th>
+                <th className="px-6 py-4">Last Seen</th>
+                <th className="px-6 py-4 text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {nodes.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    <div className="flex flex-col items-center gap-2">
+                      <AlertCircle className="w-8 h-8 opacity-50 mb-2" />
+                      <p className="tracking-wide uppercase text-sm">No internal nodes found.</p>
+                      <p className="text-xs opacity-70">Add an internal node to get started.</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                nodes.map((node) => (
+                  <tr key={node.id} className="hover:bg-white/5 transition-colors group">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-bold text-white tracking-wide">{node.name}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <code className="text-xs text-blue-400 bg-blue-400/10 px-2 py-1 rounded-md font-mono border border-blue-400/20">{node.fingerprint}</code>
+                        <button
+                          onClick={() => copyToClipboard(node.fingerprint)}
+                          className="p-1.5 hover:bg-white/10 rounded-md text-gray-500 hover:text-white transition-colors"
+                        >
+                          <Copy size={14} />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {(() => {
+                        const connStatus = node.metadata?.connection_status || 'failed'
+                        const getStatusColor = (status: string) => {
+                          switch (status) {
+                            case 'connected': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 glow-emerald/20'
+                            case 'connecting':
+                            case 'reconnecting': return 'bg-amber-500/10 text-amber-400 border-amber-500/30 glow-amber/20'
+                            case 'failed': return 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                            default: return 'bg-gray-500/10 text-gray-400 border-gray-500/30'
+                          }
+                        }
+                        const getStatusIcon = (status: string) => {
+                          switch (status) {
+                            case 'connected': return <CheckCircle size={12} className="text-emerald-400" />
+                            case 'connecting':
+                            case 'reconnecting': return <AlertCircle size={12} className="text-amber-400" />
+                            case 'failed': return <XCircle size={12} className="text-rose-400" />
+                            default: return <XCircle size={12} className="text-gray-400" />
+                          }
+                        }
+                        const getStatusText = (status: string) => {
+                          switch (status) {
+                            case 'connected': return 'Connected'
+                            case 'connecting': return 'Connecting'
+                            case 'reconnecting': return 'Reconnecting'
+                            case 'failed': return 'Failed'
+                            default: return status
+                          }
+                        }
+                        return (
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider border ${getStatusColor(connStatus)}`}>
+                            {getStatusIcon(connStatus)}
+                            {getStatusText(connStatus)}
+                          </span>
+                        )
+                      })()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">
+                      {node.metadata?.ip_address || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(node.last_seen).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <button
+                        onClick={() => deleteNode(node.id)}
+                        className="p-2 text-red-500 bg-red-500/10 border border-red-500/20 hover:bg-red-500 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                        title="Delete Node"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {showAddModal && (
@@ -280,7 +281,7 @@ const Nodes = () => {
           certContent={certContent}
           loading={certLoading}
           onClose={() => setShowCertModal(false)}
-          onCopy={() => copyToClipboard(certContent)}
+          onCopy={() => setCopied(true)}
           copied={copied}
         />
       )}
@@ -302,11 +303,13 @@ const AddNodeModal = ({ onClose, onSuccess }: AddNodeModalProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await api.post('/nodes', { 
-        name, 
-        ip_address: ipAddress, 
+      await api.post('/nodes', {
+        name,
+        ip_address: ipAddress,
         api_port: parseInt(apiPort) || 8888,
-        metadata: {} 
+        metadata: {
+          role: 'iran'
+        }
       })
       onSuccess()
     } catch (error) {
@@ -316,66 +319,77 @@ const AddNodeModal = ({ onClose, onSuccess }: AddNodeModalProps) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t.nodes.addNode}</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Node Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              IP Address
-            </label>
-            <input
-              type="text"
-              value={ipAddress}
-              onChange={(e) => setIpAddress(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400"
-              placeholder="e.g., 192.168.1.100"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              API Port
-            </label>
-            <input
-              type="number"
-              value={apiPort}
-              onChange={(e) => setApiPort(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400"
-              placeholder="8888"
-              min="1"
-              max="65535"
-              required
-            />
-          </div>
-          <div className="flex gap-3 justify-end">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
-            >
-              {t.nodes.addNode}
-            </button>
-          </div>
-        </form>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="glass-strong rounded-2xl border border-white/10 w-full max-w-md relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
+
+        <div className="p-6">
+          <h2 className="text-xl font-black text-white tracking-wide uppercase mb-6 flex items-center gap-2">
+            <Network className="text-blue-400" size={24} />
+            {t.nodes.addNode}
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-xs font-bold tracking-widest uppercase text-gray-400 mb-2">
+                Node Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 bg-black/40 border border-white/5 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-medium"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold tracking-widest uppercase text-gray-400 mb-2">
+                IP Address
+              </label>
+              <input
+                type="text"
+                value={ipAddress}
+                onChange={(e) => setIpAddress(e.target.value)}
+                className="w-full px-4 py-3 bg-black/40 border border-white/5 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-medium font-mono"
+                placeholder="e.g., 192.168.1.100"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold tracking-widest uppercase text-gray-400 mb-2">
+                API Port
+              </label>
+              <input
+                type="number"
+                value={apiPort}
+                onChange={(e) => setApiPort(e.target.value)}
+                className="w-full px-4 py-3 bg-black/40 border border-white/5 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-medium font-mono"
+                placeholder="8888"
+                min="1"
+                max="65535"
+                required
+              />
+            </div>
+
+            <div className="flex gap-3 pt-4 border-t border-white/5 mt-6">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-4 py-3 rounded-xl bg-white/5 text-gray-300 font-bold uppercase tracking-wider text-sm hover:bg-white/10 transition-colors border border-white/5"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 px-4 py-3 rounded-xl bg-blue-500/20 text-blue-400 font-bold uppercase tracking-wider text-sm hover:bg-blue-500 hover:text-white transition-all border border-blue-500/30 hover:border-blue-400"
+              >
+                {t.nodes.addNode}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )
@@ -391,91 +405,101 @@ interface CertModalProps {
 
 const CertModal = ({ certContent, loading, onClose, onCopy, copied }: CertModalProps) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] flex flex-col">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">CA Certificate</h2>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="glass-strong rounded-2xl border border-white/10 w-full max-w-2xl max-h-[90vh] flex flex-col relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-green-500"></div>
+
+        <div className="p-6 border-b border-white/5 flex justify-between items-center">
+          <h2 className="text-xl font-black text-white tracking-wide uppercase flex items-center gap-2">
+            <CheckCircle className="text-emerald-400" size={24} />
+            Internal Node CA Certificate
+          </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-gray-200 hover:bg-white/10 transition-colors"
           >
-            <XCircle size={24} />
+            <XCircle size={20} />
           </button>
         </div>
-        
-        <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg">
-          <p className="text-sm text-blue-800 dark:text-blue-200">
-            <strong>Node Installation:</strong> Copy the certificate below (click "Copy Certificate" button). 
-            During node installation, you will be prompted to paste this certificate.
-          </p>
-        </div>
 
-        {loading ? (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-gray-500 dark:text-gray-400">Loading certificate...</div>
+        <div className="p-6 flex-1 overflow-auto">
+          <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+            <p className="text-sm text-emerald-300 leading-relaxed font-medium pl-2">
+              <strong className="text-emerald-400">Node Installation:</strong> Copy the certificate below.
+              During internal node installation, you will be prompted to paste this certificate.
+            </p>
           </div>
-        ) : (
-          <>
-            <textarea
-              readOnly
-              value={certContent}
-              className="flex-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-mono text-sm bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 resize-none"
-              style={{ minHeight: '300px' }}
-            />
-            
-            <div className="flex justify-end gap-3 mt-4">
-              <button
-                type="button"
-                onClick={async (e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  try {
-                    if (certContent && certContent.trim().length > 0) {
-                      await navigator.clipboard.writeText(certContent)
-                      onCopy()
-                    } else {
-                      alert('Certificate content is empty. Please wait for it to load.')
-                    }
-                  } catch (error) {
-                    console.error('Failed to copy:', error)
-                    const textarea = e.currentTarget.closest('.bg-white, .dark\\:bg-gray-800')?.querySelector('textarea')
-                    if (textarea) {
-                      textarea.select()
-                      textarea.setSelectionRange(0, 99999)
-                      try {
-                        document.execCommand('copy')
+
+          {loading ? (
+            <div className="flex-1 flex flex-col items-center justify-center min-h-[200px]">
+              <div className="relative mb-4">
+                <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl animate-pulse"></div>
+                <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-t-2 border-emerald-400 relative z-10"></div>
+              </div>
+              <div className="text-emerald-400 font-bold uppercase tracking-widest text-xs">Loading certificate...</div>
+            </div>
+          ) : (
+            <>
+              <textarea
+                readOnly
+                value={certContent}
+                className="w-full px-5 py-4 border border-white/10 rounded-xl font-mono text-sm bg-black/60 text-emerald-400 resize-none focus:outline-none focus:border-emerald-500/50 custom-scrollbar shadow-inner"
+                style={{ minHeight: '300px' }}
+              />
+
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={onClose}
+                  className="px-5 py-2.5 rounded-xl bg-white/5 text-gray-300 font-bold uppercase tracking-wider text-xs hover:bg-white/10 transition-colors border border-white/5"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  onClick={async (e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    try {
+                      if (certContent && certContent.trim().length > 0) {
+                        await navigator.clipboard.writeText(certContent)
                         onCopy()
-                      } catch (err) {
+                      } else {
+                        alert('Certificate content is empty. Please wait for it to load.')
+                      }
+                    } catch (error) {
+                      console.error('Failed to copy:', error)
+                      const textarea = e.currentTarget.closest('.bg-white, .dark\\:bg-gray-800')?.querySelector('textarea')
+                      if (textarea) {
+                        textarea.select()
+                        textarea.setSelectionRange(0, 99999)
+                        try {
+                          document.execCommand('copy')
+                          onCopy()
+                        } catch (err) {
+                          alert('Failed to copy to clipboard. Please select and copy manually from the text area above.')
+                        }
+                      } else {
                         alert('Failed to copy to clipboard. Please select and copy manually from the text area above.')
                       }
-                    } else {
-                      alert('Failed to copy to clipboard. Please select and copy manually from the text area above.')
                     }
-                  }
-                }}
-                disabled={loading || !certContent || certContent.trim().length === 0}
-                className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-                  copied
-                    ? 'bg-green-600 text-white'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
-                }`}
-              >
-                <Copy size={16} />
-                {copied ? 'Copied!' : 'Copy Certificate'}
-              </button>
-              <button
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
-              >
-                Close
-              </button>
-            </div>
-          </>
-        )}
+                  }}
+                  disabled={loading || !certContent || certContent.trim().length === 0}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 border ${copied
+                      ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                      : 'bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed'
+                    }`}
+                >
+                  <Copy size={16} />
+                  {copied ? 'Copied!' : 'Copy Certificate'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
 }
 
 export default Nodes
-
