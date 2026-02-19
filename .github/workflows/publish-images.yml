@@ -16,7 +16,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository_owner }}/smite
+  IMAGE_PREFIX: ${{ github.repository_owner }}/cimex
 
 jobs:
   prepare:
@@ -41,7 +41,7 @@ jobs:
       - name: Set lowercase image prefix
         id: image-prefix
         run: |
-          echo "prefix=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')/smite" >> $GITHUB_OUTPUT
+          echo "prefix=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')/cimex" >> $GITHUB_OUTPUT
 
       - name: Detect relevant changes
         id: changes
@@ -100,7 +100,7 @@ jobs:
         run: |
           if [ "${{ github.ref_type }}" = "tag" ] && [[ "${{ github.ref_name }}" =~ ^v[0-9] ]]; then
             echo "should_tag=true" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.ref }}" = "refs/heads/main" ] && [ "${{ steps.has-version.outputs.has_version }}" = "true" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
             echo "should_tag=true" >> "$GITHUB_OUTPUT"
           else
             echo "should_tag=false" >> "$GITHUB_OUTPUT"
@@ -155,7 +155,7 @@ jobs:
           tags: ${{ steps.meta-panel.outputs.tags }}
           labels: ${{ steps.meta-panel.outputs.labels }}
           build-args: |
-            SMITE_VERSION=${{ needs.prepare.outputs.version }}
+            CIMEX_VERSION=${{ needs.prepare.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -208,6 +208,6 @@ jobs:
           tags: ${{ steps.meta-node.outputs.tags }}
           labels: ${{ steps.meta-node.outputs.labels }}
           build-args: |
-            SMITE_VERSION=${{ needs.prepare.outputs.version }}
+            CIMEX_VERSION=${{ needs.prepare.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
