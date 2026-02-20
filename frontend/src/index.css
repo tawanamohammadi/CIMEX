@@ -11,49 +11,59 @@
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-  }
 
+  :root,
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* Extreme Dark Cyberpunk Theme */
+    --background: 226 50% 5%;
+    /* #06080F Deepest space black/blue */
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    /* High contrast white text */
+
+    /* Card is heavily transparent for glassmorphism */
+    --card: 226 30% 12% / 0.4;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+
+    --popover: 226 30% 12% / 0.7;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+
+    /* Neon Cyber Cyan */
+    --primary: 190 100% 50%;
+    /* #00FFFF */
+    --primary-foreground: 0 0% 0%;
+    /* Black text on cyan glow */
+
+    /* Deep Purple Accent */
+    --secondary: 270 70% 50%;
+    /* #8A2BE2 */
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
+
+    /* Muted states */
+    --muted: 226 30% 20% / 0.5;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+
+    /* Accent is neon pink/magenta */
+    --accent: 330 100% 50%;
+    /* #FF007F */
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+
+    /* Warnings / Errors */
+    --destructive: 0 100% 65%;
+    /* Bright Neon Red */
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+
+    /* Soft glowing borders */
+    --border: 210 40% 98% / 0.1;
+    --input: 210 40% 98% / 0.1;
+    --ring: 190 100% 50%;
+    /* Cyan ring */
+
+    --radius: 1rem;
+
+    /* Custom Glow Variables */
+    --glow-cyan: 0 0 15px rgba(0, 255, 255, 0.4);
+    --glow-purple: 0 0 15px rgba(138, 43, 226, 0.4);
+    --glow-pink: 0 0 15px rgba(255, 0, 127, 0.4);
   }
 }
 
@@ -63,7 +73,11 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased min-h-screen relative overflow-x-hidden;
+    /* Optional: Subtle background mesh grid or grain could be applied here */
+    background-image:
+      radial-gradient(circle at 15% 50%, rgba(0, 255, 255, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(138, 43, 226, 0.08), transparent 25%);
   }
 
   [dir="rtl"],
@@ -73,6 +87,26 @@
 
   [dir="ltr"],
   [lang="en"] {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-card backdrop-blur-xl border border-white/10;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  }
+
+  .glass-button {
+    @apply backdrop-blur-md border border-white/20;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .glow-cyan-text {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+  }
+
+  .glow-cyan-box {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.1);
   }
 }
