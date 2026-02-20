@@ -113,8 +113,8 @@ const Nodes = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <Network className="text-primary w-8 h-8 animate-pulse" />
-        <p className="text-muted-foreground text-sm font-medium">Loading Nodes...</p>
+        <Network className="text-cyan-400 w-12 h-12 animate-pulse drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]" />
+        <p className="text-white/60 text-sm font-bold tracking-widest uppercase">Establishing Uplink...</p>
       </div>
     )
   }
@@ -123,128 +123,122 @@ const Nodes = () => {
     <div className="w-full space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-1">{t.nodes.title}</h1>
-          <p className="text-muted-foreground text-sm">{t.nodes.subtitle}</p>
+          <h1 className="text-3xl font-black tracking-tight mb-1 text-white glow-cyan-text">{t.nodes.title}</h1>
+          <p className="text-white/60 text-sm">{t.nodes.subtitle}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={showCA}
-            className="flex items-center gap-2 px-4 py-2 bg-accent/50 hover:bg-accent text-accent-foreground font-medium rounded-md transition-colors text-sm"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider border border-white/5"
           >
-            <Copy size={16} />
+            <Copy size={16} className="text-purple-400" />
             <span>{t.nodes.viewCACertificate}</span>
           </button>
 
           <button
             onClick={downloadCA}
-            className="flex items-center gap-2 px-4 py-2 bg-accent/50 hover:bg-accent text-accent-foreground font-medium rounded-md transition-colors text-sm"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider border border-white/5"
           >
-            <Download size={16} />
+            <Download size={16} className="text-cyan-400" />
             <span>{t.nodes.downloadCA}</span>
           </button>
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors text-sm"
+            className="flex items-center justify-center gap-2 px-5 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-50 font-bold rounded-xl transition-all text-xs uppercase tracking-wider border border-cyan-500/50 shadow-[0_0_15px_rgba(0,255,255,0.2)]"
           >
-            <Plus size={16} />
+            <Plus size={16} className="text-cyan-400" />
             <span>{t.nodes.addNode}</span>
           </button>
         </div>
       </div>
 
-      <div className="bg-card border border-border shadow-sm rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="glass-panel overflow-hidden rounded-2xl">
+        <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-muted/50 border-b border-border text-muted-foreground font-semibold">
+            <thead className="bg-black/40 border-b border-white/10 text-white/50 font-bold tracking-wider uppercase text-xs">
               <tr>
-                <th className="px-6 py-4">Name</th>
-                <th className="px-6 py-4">Fingerprint</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">IP Address</th>
-                <th className="px-6 py-4">Last Seen</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-5">Node Identity</th>
+                <th className="px-6 py-5">Fingerprint</th>
+                <th className="px-6 py-5">Link Status</th>
+                <th className="px-6 py-5">IP Address</th>
+                <th className="px-6 py-5">Last Telemetry</th>
+                <th className="px-6 py-5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-white/5">
               {nodes.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground font-medium">
-                    <div className="flex flex-col items-center gap-2">
-                      <AlertCircle className="w-6 h-6 mb-1 opacity-50" />
-                      <p>No internal nodes found.</p>
-                      <p className="text-xs opacity-75">Add a node to get started.</p>
+                  <td colSpan={6} className="px-6 py-16 text-center text-white/40 font-medium bg-black/20">
+                    <div className="flex flex-col items-center gap-3">
+                      <AlertCircle className="w-8 h-8 opacity-50 text-cyan-400" />
+                      <p className="text-base tracking-widest uppercase">No orbital nodes detected.</p>
+                      <p className="text-xs opacity-60">Deploy a new node to establish connection.</p>
                     </div>
                   </td>
                 </tr>
               ) : (
                 nodes.map((node) => (
-                  <tr key={node.id} className="hover:bg-muted/30 transition-colors group">
-                    <td className="px-6 py-4 font-semibold">
+                  <tr key={node.id} className="hover:bg-white/5 transition-colors group">
+                    <td className="px-6 py-5 font-bold text-white flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                        <Network size={16} />
+                      </div>
                       {node.name}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-5">
                       <div className="flex items-center gap-2 text-xs">
-                        <code className="bg-muted px-2 py-1 rounded border border-border text-primary">{node.fingerprint}</code>
+                        <code className="bg-black/50 px-2.5 py-1.5 rounded-lg border border-white/10 text-cyan-200 font-mono tracking-wider">{node.fingerprint}</code>
                         <button
                           onClick={() => copyToClipboard(node.fingerprint)}
-                          className="p-1 hover:text-foreground text-muted-foreground transition-colors"
+                          className="p-1.5 hover:bg-white/10 rounded-md text-white/50 hover:text-white transition-colors"
                         >
                           <Copy size={14} />
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-5">
                       {(() => {
                         const connStatus = node.metadata?.connection_status || 'failed'
                         const getStatusClasses = (status: string) => {
                           switch (status) {
-                            case 'connected': return 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20'
+                            case 'connected': return 'bg-green-500/10 text-green-400 border-green-500/30 drop-shadow-[0_0_8px_rgba(74,222,128,0.4)]'
                             case 'connecting':
-                            case 'reconnecting': return 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20'
-                            case 'failed': return 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
-                            default: return 'bg-muted text-muted-foreground border-border'
+                            case 'reconnecting': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30'
+                            case 'failed': return 'bg-red-500/10 text-red-400 border-red-500/30'
+                            default: return 'bg-white/5 text-white/50 border-white/10'
                           }
                         }
                         const getStatusIcon = (status: string) => {
                           switch (status) {
                             case 'connected': return <CheckCircle size={14} />
                             case 'connecting':
-                            case 'reconnecting': return <AlertCircle size={14} />
+                            case 'reconnecting': return <AlertCircle size={14} className="animate-pulse" />
                             case 'failed': return <XCircle size={14} />
                             default: return <XCircle size={14} />
                           }
                         }
-                        const getStatusText = (status: string) => {
-                          switch (status) {
-                            case 'connected': return 'Connected'
-                            case 'connecting': return 'Connecting'
-                            case 'reconnecting': return 'Reconnecting'
-                            case 'failed': return 'Failed'
-                            default: return status
-                          }
-                        }
                         return (
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border ${getStatusClasses(connStatus)}`}>
+                          <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest border ${getStatusClasses(connStatus)}`}>
                             {getStatusIcon(connStatus)}
-                            {getStatusText(connStatus)}
+                            {connStatus}
                           </span>
                         )
                       })()}
                     </td>
-                    <td className="px-6 py-4 font-mono text-muted-foreground">
-                      {node.metadata?.ip_address || 'N/A'}
+                    <td className="px-6 py-5 font-mono text-white/80 text-sm">
+                      {node.metadata?.ip_address || 'Unassigned'}
                     </td>
-                    <td className="px-6 py-4 text-muted-foreground">
+                    <td className="px-6 py-5 text-white/60 text-xs font-mono">
                       {new Date(node.last_seen).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-5 text-right">
                       <button
                         onClick={() => deleteNode(node.id)}
-                        className="p-2 text-destructive hover:bg-destructive/10 rounded-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                        title="Delete Node"
+                        className="p-2 text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-lg transition-all opacity-0 group-hover:opacity-100 border border-transparent hover:border-red-500/30"
+                        title="Decommission Node"
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={18} />
                       </button>
                     </td>
                   </tr>
@@ -308,51 +302,56 @@ const AddNodeModal = ({ onClose, onSuccess }: AddNodeModalProps) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-card w-full max-w-md rounded-xl border border-border shadow-lg flex flex-col overflow-hidden">
-        <div className="p-6">
-          <h2 className="text-lg font-bold flex items-center gap-2 mb-6">
-            <Network className="text-primary" size={20} />
-            {t.nodes.addNode}
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-50 p-4 animation-fade-in">
+      <div className="glass-panel w-full max-w-md rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,255,255,0.1)] flex flex-col overflow-hidden relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
+
+        <div className="p-8">
+          <h2 className="text-xl font-black flex items-center gap-3 mb-8 text-white tracking-wide">
+            <div className="p-2 bg-cyan-500/20 rounded-lg text-cyan-400">
+              <Network size={22} />
+            </div>
+            Deploy Internal Node
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">
-                Node Name
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-white/60">
+                Node Identity
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 bg-input border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-white/20 font-medium transition-all"
+                placeholder="e.g. Tehran-Relay-01"
                 required
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-white/60">
                 IP Address
               </label>
               <input
                 type="text"
                 value={ipAddress}
                 onChange={(e) => setIpAddress(e.target.value)}
-                className="w-full px-3 py-2 bg-input border border-border rounded-md font-mono focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
-                placeholder="e.g., 192.168.1.100"
+                className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-cyan-100 placeholder-white/20 transition-all"
+                placeholder="0.0.0.0"
                 required
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-white/60">
                 API Port
               </label>
               <input
                 type="number"
                 value={apiPort}
                 onChange={(e) => setApiPort(e.target.value)}
-                className="w-full px-3 py-2 bg-input border border-border rounded-md font-mono focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-cyan-100 placeholder-white/20 transition-all"
                 placeholder="8888"
                 min="1"
                 max="65535"
@@ -360,19 +359,19 @@ const AddNodeModal = ({ onClose, onSuccess }: AddNodeModalProps) => {
               />
             </div>
 
-            <div className="flex gap-3 pt-4 mt-6">
+            <div className="flex gap-3 pt-6 mt-2 border-t border-white/5">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-2 rounded-md bg-accent text-accent-foreground font-semibold text-sm hover:bg-accent/80 transition-colors"
+                className="flex-1 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-bold text-sm tracking-widest uppercase transition-colors border border-white/5"
               >
-                Cancel
+                Abort
               </button>
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors"
+                className="flex-1 px-4 py-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-50 font-bold text-sm tracking-widest uppercase transition-all shadow-[0_0_15px_rgba(0,255,255,0.2)] border border-cyan-500/50"
               >
-                {t.nodes.addNode}
+                Launch Node
               </button>
             </div>
           </form>
@@ -392,43 +391,48 @@ interface CertModalProps {
 
 const CertModal = ({ certContent, loading, onClose, onCopy, copied }: CertModalProps) => {
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-card w-full max-w-xl max-h-[90vh] rounded-xl border border-border shadow-lg flex flex-col overflow-hidden">
-        <div className="p-4 border-b border-border flex justify-between items-center bg-muted/30">
-          <h2 className="text-base font-bold flex items-center gap-2">
-            <Network className="text-primary w-5 h-5" />
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-50 p-4 animation-fade-in">
+      <div className="glass-panel w-full max-w-2xl max-h-[90vh] rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(168,85,247,0.15)] flex flex-col overflow-hidden relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50"></div>
+
+        <div className="p-6 border-b border-white/10 flex justify-between items-center bg-black/20">
+          <h2 className="text-lg font-black flex items-center gap-3 text-white tracking-wide">
+            <div className="p-2 bg-purple-500/20 rounded-lg text-purple-400">
+              <Network size={20} />
+            </div>
             Internal Node CA Certificate
           </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            className="p-2 rounded-xl text-white/50 hover:bg-white/10 hover:text-white transition-colors"
           >
-            <XCircle size={18} />
+            <XCircle size={22} />
           </button>
         </div>
 
-        <div className="p-6 flex-1 overflow-auto">
-          <div className="mb-4 p-3 bg-muted border border-border rounded-md text-sm text-muted-foreground">
-            <strong>Node Installation:</strong> Copy the certificate below. During internal node installation, you will be prompted to paste this certificate.
+        <div className="p-6 flex-1 overflow-auto custom-scrollbar">
+          <div className="mb-6 p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl text-sm text-purple-200/80 leading-relaxed font-bold">
+            <span className="text-purple-400 uppercase tracking-widest text-xs block mb-1">Protocol Instruction:</span>
+            Copy the certificate payload below. During internal node installation, you will be required to transmit this secure payload.
           </div>
 
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
-              <Network className="w-8 h-8 animate-pulse text-primary" />
-              <div className="text-sm font-semibold uppercase tracking-widest">Loading certificate...</div>
+            <div className="flex flex-col items-center justify-center py-16 gap-4 text-white/50">
+              <Network className="w-10 h-10 animate-pulse text-purple-400 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" />
+              <div className="text-xs font-bold uppercase tracking-widest">Decrypting Payload...</div>
             </div>
           ) : (
             <>
               <textarea
                 readOnly
                 value={certContent}
-                className="w-full h-64 p-4 border border-border rounded-md font-mono text-[13px] bg-input focus:outline-none focus:ring-1 focus:ring-primary shadow-sm"
+                className="w-full h-72 p-5 border border-white/10 rounded-xl font-mono text-[13px] bg-black/60 text-cyan-200/70 focus:outline-none focus:ring-1 focus:ring-purple-500/50 shadow-inner custom-scrollbar"
               />
 
-              <div className="flex justify-end gap-3 mt-4">
+              <div className="flex justify-end gap-3 mt-6">
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 rounded-md hover:bg-accent text-accent-foreground font-medium text-sm transition-colors border border-transparent hover:border-border"
+                  className="px-6 py-2.5 rounded-xl hover:bg-white/10 text-white font-bold text-xs uppercase tracking-widest transition-colors border border-transparent hover:border-white/10"
                 >
                   Close
                 </button>
@@ -446,7 +450,7 @@ const CertModal = ({ certContent, loading, onClose, onCopy, copied }: CertModalP
                       }
                     } catch (error) {
                       console.error('Failed to copy:', error)
-                      const textarea = e.currentTarget.closest('.bg-card')?.querySelector('textarea')
+                      const textarea = e.currentTarget.closest('.glass-panel')?.querySelector('textarea')
                       if (textarea) {
                         textarea.select()
                         textarea.setSelectionRange(0, 99999)
@@ -460,13 +464,13 @@ const CertModal = ({ certContent, loading, onClose, onCopy, copied }: CertModalP
                     }
                   }}
                   disabled={loading || !certContent || certContent.trim().length === 0}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${copied
-                      ? 'bg-green-600 text-white'
-                      : 'bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50'
+                  className={`px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 border ${copied
+                    ? 'bg-green-500/20 text-green-400 border-green-500/50 shadow-[0_0_15px_rgba(74,222,128,0.2)]'
+                    : 'bg-purple-500/20 hover:bg-purple-500/30 text-purple-100 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)] disabled:opacity-50'
                     }`}
                 >
                   <Copy size={16} />
-                  {copied ? 'Copied!' : 'Copy Certificate'}
+                  {copied ? 'Payload Secured' : 'Copy Payload'}
                 </button>
               </div>
             </>

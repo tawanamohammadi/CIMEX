@@ -266,8 +266,8 @@ const Tunnels = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <Activity className="text-primary w-8 h-8 animate-pulse" />
-        <p className="text-muted-foreground text-sm font-medium">{t.tunnels.loadingTunnels || "Loading Tunnels..."}</p>
+        <Activity className="text-cyan-400 w-12 h-12 animate-pulse drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]" />
+        <p className="text-white/60 text-sm font-bold tracking-widest uppercase">{t.tunnels.loadingTunnels || "Initializing Tunnels..."}</p>
       </div>
     )
   }
@@ -276,24 +276,24 @@ const Tunnels = () => {
     <div className="w-full space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-1">{t.tunnels.title}</h1>
-          <p className="text-muted-foreground text-sm">{t.tunnels.subtitle}</p>
+          <h1 className="text-3xl font-black tracking-tight mb-1 text-white glow-cyan-text">{t.tunnels.title}</h1>
+          <p className="text-white/60 text-sm">{t.tunnels.subtitle}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handleReapplyAll}
             disabled={reapplyingAll}
-            className="flex items-center gap-2 px-4 py-2 bg-accent/50 hover:bg-accent text-accent-foreground font-medium rounded-md transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider border border-white/5 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
           >
-            <RotateCw size={16} className={reapplyingAll ? "animate-spin" : ""} />
+            <RotateCw size={16} className={`text-cyan-400 ${reapplyingAll ? "animate-spin" : ""}`} />
             <span>{t.tunnels.reapplyAll}</span>
           </button>
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors text-sm"
+            className="flex items-center justify-center gap-2 px-5 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-50 font-bold rounded-xl transition-all text-xs uppercase tracking-wider border border-cyan-500/50 shadow-[0_0_15px_rgba(0,255,255,0.2)]"
           >
-            <Plus size={16} />
+            <Plus size={16} className="text-cyan-400" />
             <span>{t.tunnels.createTunnel}</span>
           </button>
         </div>
@@ -344,29 +344,38 @@ const Tunnels = () => {
           return (
             <div
               key={tunnel.id}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 transition-all hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600"
+              className="glass-panel rounded-2xl p-6 transition-all hover:bg-white/5"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-4 flex-1 min-w-0">
-                  {/* Status Badge */}
-                  <span
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 ${tunnel.status === 'active'
-                      ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
-                      : tunnel.status === 'error'
-                        ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                      }`}
-                  >
-                    {tunnel.status}
-                  </span>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex items-start gap-5 flex-1 min-w-0">
+                  {/* Status Indicator */}
+                  <div className="pt-1 shrink-0">
+                    <span
+                      className={`relative flex h-4 w-4`}
+                    >
+                      {tunnel.status === 'active' && (
+                        <>
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-4 w-4 bg-cyan-500 shadow-[0_0_10px_rgba(0,255,255,0.8)]"></span>
+                        </>
+                      )}
+                      {tunnel.status === 'error' && (
+                        <>
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 shadow-[0_0_10px_rgba(248,113,113,0.8)]"></span>
+                        </>
+                      )}
+                      {tunnel.status !== 'active' && tunnel.status !== 'error' && (
+                        <span className="relative inline-flex rounded-full h-4 w-4 bg-white/20"></span>
+                      )}
+                    </span>
+                  </div>
 
                   <div className="flex-1 min-w-0">
-                    {/* Name, Core Badge, Transmission Badge, and Ports in one line */}
-                    <div className="flex items-center gap-3 mb-2 flex-wrap">
-                      <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">{tunnel.name}</h3>
-                      <span
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide border ${coreBadge.bg} ${coreBadge.text} ${coreBadge.border} shrink-0`}
-                      >
+                    {/* Tunnel Essentials Header */}
+                    <div className="flex items-center gap-3 mb-3 flex-wrap">
+                      <h3 className="text-lg font-black text-white tracking-wide truncate drop-shadow-md">{tunnel.name}</h3>
+                      <span className="px-3 py-1 bg-black/50 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest text-cyan-300">
                         {tunnel.core}
                       </span>
                       {(() => {
@@ -379,38 +388,29 @@ const Tunnels = () => {
                         } else if (tunnel.type && tunnel.type.toLowerCase() !== tunnel.core.toLowerCase()) {
                           transmissionType = tunnel.type.toUpperCase()
                         }
-
                         if (!transmissionType) return null
-
-                        const getTransmissionBadge = () => {
-                          const typeColors: Record<string, { bg: string; text: string; border: string }> = {
-                            TCP: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-800 dark:text-green-200', border: 'border-green-300 dark:border-green-700' },
-                            UDP: { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-800 dark:text-yellow-200', border: 'border-yellow-300 dark:border-yellow-700' },
-                            WS: { bg: 'bg-pink-100 dark:bg-pink-900/30', text: 'text-pink-800 dark:text-pink-200', border: 'border-pink-300 dark:border-pink-700' },
-                            WSS: { bg: 'bg-pink-100 dark:bg-pink-900/30', text: 'text-pink-800 dark:text-pink-200', border: 'border-pink-300 dark:border-pink-700' },
-                            GRPC: { bg: 'bg-teal-100 dark:bg-teal-900/30', text: 'text-teal-800 dark:text-teal-200', border: 'border-teal-300 dark:border-teal-700' },
-                            TCPMUX: { bg: 'bg-violet-100 dark:bg-violet-900/30', text: 'text-violet-800 dark:text-violet-200', border: 'border-violet-300 dark:border-violet-700' },
-                          }
-                          return typeColors[transmissionType] || { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-800 dark:text-gray-200', border: 'border-gray-300 dark:border-gray-600' }
-                        }
-
-                        const transmissionBadge = getTransmissionBadge()
                         return (
-                          <span
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide border ${transmissionBadge.bg} ${transmissionBadge.text} ${transmissionBadge.border} shrink-0`}
-                          >
+                          <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white/70">
                             {transmissionType}
                           </span>
                         )
                       })()}
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Ports:</span>
-                        <span className="text-sm font-mono font-semibold text-gray-700 dark:text-gray-300">{ports}</span>
-                      </div>
                     </div>
 
-                    {/* Core Port, Node and Server Info */}
-                    <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                    {/* Tunnel Routing Details */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-black/20 p-4 rounded-xl border border-white/5 mb-2">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Node (Origin)</span>
+                        <span className="text-sm text-cyan-50 font-medium truncate">{iranNode ? (iranNode.name || iranNode.id.substring(0, 8)) : 'Unknown'}</span>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Server (Foreign)</span>
+                        <span className="text-sm text-purple-200 font-medium truncate drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]">{foreignServer ? (foreignServer.name || foreignServer.id.substring(0, 8)) : 'Unknown'}</span>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Forwarded Ports</span>
+                        <span className="text-sm font-mono text-cyan-300 break-all">{ports}</span>
+                      </div>
                       {(() => {
                         let corePort = null
                         if (tunnel.core === 'rathole') {
@@ -418,9 +418,7 @@ const Tunnels = () => {
                             const match = tunnel.spec.bind_addr.match(/:(\d+)$/)
                             if (match) corePort = match[1]
                           }
-                          if (!corePort && tunnel.spec?.control_port) {
-                            corePort = tunnel.spec.control_port
-                          }
+                          if (!corePort && tunnel.spec?.control_port) corePort = tunnel.spec.control_port
                           if (!corePort) {
                             const remoteAddr = tunnel.spec?.remote_addr || ''
                             const match = remoteAddr.match(/:(\d+)$/)
@@ -435,29 +433,17 @@ const Tunnels = () => {
                           corePort = tunnel.spec?.bind_port || '7000'
                         }
                         return corePort ? (
-                          <div className="flex items-center gap-1.5">
-                            <span className="font-medium">Core Port:</span>
-                            <span className="text-gray-700 dark:text-gray-300 font-mono">{corePort}</span>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Core Access</span>
+                            <span className="text-sm font-mono text-white/70">{corePort}</span>
                           </div>
                         ) : null
                       })()}
-                      {iranNode && (
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-medium">Node:</span>
-                          <span className="text-gray-700 dark:text-gray-300">{iranNode.name || iranNode.id.substring(0, 8)}</span>
-                        </div>
-                      )}
-                      {foreignServer && (
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-medium">Server:</span>
-                          <span className="text-gray-700 dark:text-gray-300">{foreignServer.name || foreignServer.id.substring(0, 8)}</span>
-                        </div>
-                      )}
                     </div>
 
                     {/* Error Message */}
                     {tunnel.status === 'error' && tunnel.error_message && (
-                      <div className="mt-2 text-xs text-red-600 dark:text-red-400">
+                      <div className="mt-3 text-[11px] font-mono p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-lg">
                         {tunnel.error_message}
                       </div>
                     )}
@@ -465,25 +451,25 @@ const Tunnels = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 shrink-0">
+                <div className="flex md:flex-col gap-2 shrink-0 md:justify-center w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t border-white/5 md:border-0">
                   <button
                     onClick={() => reapplyTunnel(tunnel)}
-                    className="p-2.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
-                    title="Reapply tunnel"
+                    className="flex-1 md:flex-none p-3 text-cyan-400 hover:bg-cyan-500/20 rounded-xl transition-all border border-transparent hover:border-cyan-500/30 flex items-center justify-center"
+                    title="Reapply Session"
                   >
                     <RotateCw size={18} />
                   </button>
                   <button
                     onClick={() => setEditingTunnel(tunnel)}
-                    className="p-2.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                    title="Edit tunnel"
+                    className="flex-1 md:flex-none p-3 text-white/70 hover:bg-white/10 hover:text-white rounded-xl transition-all border border-transparent hover:border-white/10 flex items-center justify-center"
+                    title="Edit Tunnel"
                   >
                     <Edit2 size={18} />
                   </button>
                   <button
                     onClick={() => deleteTunnel(tunnel.id)}
-                    className="p-2.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                    title="Delete tunnel"
+                    className="flex-1 md:flex-none p-3 text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-xl transition-all border border-transparent hover:border-red-500/30 flex items-center justify-center"
+                    title="Terminate Link"
                   >
                     <Trash2 size={18} />
                   </button>
