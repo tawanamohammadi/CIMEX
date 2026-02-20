@@ -661,26 +661,33 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Edit Tunnel</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] animation-fade-in p-4 sm:p-0">
+      <div className="glass-panel border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-[0_0_40px_rgba(0,0,0,0.5)] relative overflow-hidden">
+        {/* Glow Effects */}
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-[50px] pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-cyan-500/20 rounded-full blur-[50px] pointer-events-none" />
+
+        <h2 className="text-xl font-black text-white glow-cyan-text mb-6 flex items-center gap-2 relative z-10">
+          <Activity size={20} className="text-cyan-400" />
+          Edit Tunnel Configuration
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
               {t.tunnels.name}
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+              className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
               required
             />
           </div>
           {tunnel.core === 'gost' && (tunnel.type === 'tcp' || tunnel.type === 'udp' || tunnel.type === 'grpc' || tunnel.type === 'tcpmux') && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                   {t.tunnels.remoteIP}
                 </label>
                 <input
@@ -689,15 +696,15 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                   onChange={(e) =>
                     setFormData({ ...formData, remote_ip: e.target.value || '127.0.0.1' })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                   placeholder="127.0.0.1 or [2001:db8::1]"
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                   {t.tunnels.remoteIPDescription}
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                   Ports
                 </label>
                 <input
@@ -706,10 +713,10 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                   onChange={(e) =>
                     setFormData({ ...formData, ports: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                   placeholder="8080,8081,8082"
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                   Ports (comma-separated, same for panel and target server)
                 </p>
               </div>
@@ -731,7 +738,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
 
           {tunnel.core === 'rathole' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                 Ports
               </label>
               <input
@@ -740,10 +747,10 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                 onChange={(e) =>
                   setFormData({ ...formData, ports: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                 placeholder="8080,8081,8082"
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                 Ports (comma-separated, same for panel and node local service)
               </p>
             </div>
@@ -752,7 +759,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
           {tunnel.core === 'rathole' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                   Rathole Port
                 </label>
                 <input
@@ -763,15 +770,15 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                     const host = window.location.hostname
                     setFormData({ ...formData, rathole_remote_addr: port ? `${host}:${port}` : '' })
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                   placeholder="23333"
                   min="1"
                   max="65535"
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Rathole server port on panel (IP: {window.location.hostname})</p>
+                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">Rathole server port on panel (IP: {window.location.hostname})</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                   Local Port
                 </label>
                 <input
@@ -780,7 +787,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                   onChange={(e) =>
                     setFormData({ ...formData, rathole_local_port: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                   placeholder="8080"
                   min="1"
                   max="65535"
@@ -792,7 +799,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
           {tunnel.core === 'chisel' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                   Ports
                 </label>
                 <input
@@ -801,16 +808,16 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                   onChange={(e) =>
                     setFormData({ ...formData, ports: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                   placeholder="8080,8081,8082"
                   required
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                   Ports (comma-separated, same for reverse port and local port)
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                   Control Port
                 </label>
                 <input
@@ -819,19 +826,19 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                   onChange={(e) =>
                     setFormData({ ...formData, chisel_control_port: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                   placeholder={`${(parseInt(formData.ports.split(',')[0]?.trim()) || 8080) + 10000} (auto)`}
                   min="1"
                   max="65535"
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                   Chisel server control port (leave empty for auto: first port + 10000)
                 </p>
               </div>
               {/* Node IPv6 address field for Chisel when v4 to v6 is enabled */}
               {tunnel.spec?.use_ipv6 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                     Node IPv6 Address (Optional)
                   </label>
                   <input
@@ -840,10 +847,10 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                     onChange={(e) =>
                       setFormData({ ...formData, node_ipv6: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                     placeholder="::1 or 2001:db8::1"
                   />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                     IPv6 address of the node. Leave empty to use ::1 (localhost IPv6)
                   </p>
                 </div>
@@ -855,7 +862,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                     Bind Port
                   </label>
                   <input
@@ -864,18 +871,18 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                     onChange={(e) =>
                       setFormData({ ...formData, frp_bind_port: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                     placeholder="7000"
                     min="1"
                     max="65535"
                     required
                   />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                     FRP server port on panel (default: 7000)
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                     Ports
                   </label>
                   <input
@@ -884,17 +891,17 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                     onChange={(e) =>
                       setFormData({ ...formData, ports: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                     placeholder="8080,8081,8082"
                     required
                   />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                     Ports (comma-separated, same for remote port and local port)
                   </p>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                   Token (Optional - Auto-generated if empty)
                 </label>
                 <input
@@ -903,10 +910,10 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                   onChange={(e) =>
                     setFormData({ ...formData, frp_token: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                   placeholder="Leave empty for auto-generation"
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Authentication token (will be auto-generated if not provided)</p>
+                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">Authentication token (will be auto-generated if not provided)</p>
               </div>
             </>
           )}
@@ -914,7 +921,7 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
           {/* Node IPv6 address field for Rathole when v4 to v6 is enabled */}
           {tunnel.core === 'rathole' && tunnel.spec?.use_ipv6 && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                 Node IPv6 Address (Optional)
               </label>
               <input
@@ -923,27 +930,28 @@ const EditTunnelModal = ({ tunnel, onClose, onSuccess }: EditTunnelModalProps) =
                 onChange={(e) =>
                   setFormData({ ...formData, node_ipv6: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20"
                 placeholder="::1 or 2001:db8::1"
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
                 IPv6 address of the node. Leave empty to use ::1 (localhost IPv6)
               </p>
             </div>
           )}
 
-          <div className="flex gap-3 justify-end">
+          <div className="flex gap-3 justify-end mt-8 border-t border-white/10 pt-5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white rounded-xl transition-all font-bold text-sm border border-white/5 hover:border-white/20"
             >
               {t.tunnels.cancel}
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-5 py-2.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/50 hover:border-cyan-400 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(0,255,255,0.15)] hover:shadow-[0_0_20px_rgba(0,255,255,0.3)] glow-cyan-text text-sm flex items-center gap-2"
             >
+              <Save size={16} />
               Save Changes
             </button>
           </div>
@@ -1196,307 +1204,199 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] overflow-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 w-full max-w-xl my-4 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t.tunnels.createTunnel}</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Name
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-              required
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t.tunnels.iranNode}
-              </label>
-              <select
-                value={formData.iran_node_id || formData.node_id}
-                onChange={(e) => setFormData({ ...formData, iran_node_id: e.target.value, node_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                required={formData.core === 'rathole' || formData.core === 'backhaul' || formData.core === 'frp' || formData.core === 'chisel'}
-              >
-                <option value="">{t.tunnels.selectIranNode}</option>
-                {nodes.map((node) => (
-                  <option key={node.id} value={node.id}>
-                    {node.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t.tunnels.foreignServer}
-              </label>
-              <select
-                value={formData.foreign_node_id}
-                onChange={(e) => setFormData({ ...formData, foreign_node_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                required={formData.core === 'rathole' || formData.core === 'backhaul' || formData.core === 'frp' || formData.core === 'chisel'}
-              >
-                <option value="">{t.tunnels.selectForeignServer}</option>
-                {servers.map((server) => (
-                  <option key={server.id} value={server.id}>
-                    {server.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] overflow-hidden p-4 sm:p-6 animation-fade-in">
+      <div className="glass-panel border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)] relative overflow-hidden">
+        {/* Glow Effects */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] pointer-events-none" />
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t.tunnels.core}
-              </label>
-              <select
-                value={formData.core}
-                onChange={(e) => handleCoreChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-              >
-                <option value="gost">GOST</option>
-                <option value="rathole">Rathole</option>
-                <option value="backhaul">Backhaul</option>
-                <option value="chisel">Chisel</option>
-                <option value="frp">FRP</option>
-              </select>
+        <div className="p-6 border-b border-white/10 relative z-10 shrink-0">
+          <h2 className="text-2xl font-black text-white glow-cyan-text flex items-center gap-3">
+            <div className="p-2 bg-cyan-500/20 rounded-lg text-cyan-400">
+              <Plus size={24} />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t.tunnels.type}
-              </label>
-              <select
-                value={formData.type}
-                onChange={(e) => {
-                  const value = e.target.value as BackhaulTransport
-                  setFormData({ ...formData, type: value })
-                  if (formData.core === 'backhaul') {
-                    setBackhaulState((prev) => ({ ...prev, transport: value }))
-                  }
-                }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                disabled={formData.core === 'chisel'}
-              >
-                {formData.core === 'chisel' ? (
-                  <option value={formData.core}>{formData.core.charAt(0).toUpperCase() + formData.core.slice(1)}</option>
-                ) : formData.core === 'rathole' ? (
-                  <>
-                    <option value="tcp">TCP</option>
-                    <option value="ws">WebSocket (WS)</option>
-                  </>
-                ) : formData.core === 'frp' ? (
-                  <>
-                    <option value="tcp">TCP</option>
-                    <option value="udp">UDP</option>
-                  </>
-                ) : formData.core === 'backhaul' ? (
-                  <>
-                    <option value="tcp">TCP</option>
-                    <option value="udp">UDP</option>
-                    <option value="ws">WebSocket (WS)</option>
-                    <option value="wsmux">WebSocket Mux</option>
-                    <option value="tcpmux">TCPMux</option>
-                  </>
-                ) : (
-                  <>
-                    <option value="tcp">TCP</option>
-                    <option value="udp">UDP</option>
-                    <option value="grpc">gRPC</option>
-                    <option value="tcpmux">TCPMux</option>
-                  </>
-                )}
-              </select>
-            </div>
-          </div>
+            {t.tunnels.createTunnel || "Deploy New Tunnel"}
+          </h2>
+        </div>
 
-          {formData.core === 'gost' && (formData.type === 'tcp' || formData.type === 'udp' || formData.type === 'grpc' || formData.type === 'tcpmux') && (
+        <div className="p-6 overflow-y-auto flex-1 relative z-10 custom-scrollbar">
+          <form onSubmit={handleSubmit} className="space-y-6" id="add-tunnel-form">
+            <div>
+              <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                Name
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                required
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  {t.tunnels.remoteIP}
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                  {t.tunnels.iranNode}
                 </label>
-                <input
-                  type="text"
-                  value={formData.remote_ip}
-                  onChange={(e) =>
-                    setFormData({ ...formData, remote_ip: e.target.value || '127.0.0.1' })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder="127.0.0.1 or [2001:db8::1]"
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {t.tunnels.remoteIPDescription}
-                </p>
+                <select
+                  value={formData.iran_node_id || formData.node_id}
+                  onChange={(e) => setFormData({ ...formData, iran_node_id: e.target.value, node_id: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                  required={formData.core === 'rathole' || formData.core === 'backhaul' || formData.core === 'frp' || formData.core === 'chisel'}
+                >
+                  <option value="">{t.tunnels.selectIranNode}</option>
+                  {nodes.map((node) => (
+                    <option key={node.id} value={node.id}>
+                      {node.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  {t.tunnels.ports}
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                  {t.tunnels.foreignServer}
                 </label>
-                <input
-                  type="text"
-                  value={formData.ports}
-                  onChange={(e) =>
-                    setFormData({ ...formData, ports: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder="8080,8081,8082"
-                  required
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {t.tunnels.portsDescription}
-                </p>
+                <select
+                  value={formData.foreign_node_id}
+                  onChange={(e) => setFormData({ ...formData, foreign_node_id: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                  required={formData.core === 'rathole' || formData.core === 'backhaul' || formData.core === 'frp' || formData.core === 'chisel'}
+                >
+                  <option value="">{t.tunnels.selectForeignServer}</option>
+                  {servers.map((server) => (
+                    <option key={server.id} value={server.id}>
+                      {server.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-          )}
 
-          {formData.core === 'backhaul' && (
-            <BackhaulForm
-              state={backhaulState}
-              onChange={(partial) => {
-                setBackhaulState((prev) => ({ ...prev, ...partial }))
-                if (partial.transport) {
-                  setFormData((prev) => ({ ...prev, type: partial.transport as string }))
-                }
-              }}
-              onOpenAdvanced={() => setShowBackhaulAdvanced(true)}
-              acceptUdpVisible={
-                backhaulState.transport === 'tcp' || backhaulState.transport === 'tcpmux'
-              }
-            />
-          )}
-
-          {formData.core === 'rathole' && (
-            <>
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Ports
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                  {t.tunnels.core}
                 </label>
-                <input
-                  type="text"
-                  value={formData.ports}
-                  onChange={(e) =>
-                    setFormData({ ...formData, ports: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder="8080,8081,8082"
-                  required
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Ports (comma-separated, same for panel and node local service)
-                </p>
+                <select
+                  value={formData.core}
+                  onChange={(e) => handleCoreChange(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                >
+                  <option value="gost">GOST</option>
+                  <option value="rathole">Rathole</option>
+                  <option value="backhaul">Backhaul</option>
+                  <option value="chisel">Chisel</option>
+                  <option value="frp">FRP</option>
+                </select>
               </div>
+              <div>
+                <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                  {t.tunnels.type}
+                </label>
+                <select
+                  value={formData.type}
+                  onChange={(e) => {
+                    const value = e.target.value as BackhaulTransport
+                    setFormData({ ...formData, type: value })
+                    if (formData.core === 'backhaul') {
+                      setBackhaulState((prev) => ({ ...prev, transport: value }))
+                    }
+                  }}
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                  disabled={formData.core === 'chisel'}
+                >
+                  {formData.core === 'chisel' ? (
+                    <option value={formData.core}>{formData.core.charAt(0).toUpperCase() + formData.core.slice(1)}</option>
+                  ) : formData.core === 'rathole' ? (
+                    <>
+                      <option value="tcp">TCP</option>
+                      <option value="ws">WebSocket (WS)</option>
+                    </>
+                  ) : formData.core === 'frp' ? (
+                    <>
+                      <option value="tcp">TCP</option>
+                      <option value="udp">UDP</option>
+                    </>
+                  ) : formData.core === 'backhaul' ? (
+                    <>
+                      <option value="tcp">TCP</option>
+                      <option value="udp">UDP</option>
+                      <option value="ws">WebSocket (WS)</option>
+                      <option value="wsmux">WebSocket Mux</option>
+                      <option value="tcpmux">TCPMux</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="tcp">TCP</option>
+                      <option value="udp">UDP</option>
+                      <option value="grpc">gRPC</option>
+                      <option value="tcpmux">TCPMux</option>
+                    </>
+                  )}
+                </select>
+              </div>
+            </div>
+
+            {formData.core === 'gost' && (formData.type === 'tcp' || formData.type === 'udp' || formData.type === 'grpc' || formData.type === 'tcpmux') && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Rathole Port
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.rathole_remote_addr}
-                    onChange={(e) =>
-                      setFormData({ ...formData, rathole_remote_addr: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                    placeholder="23333"
-                    min="1"
-                    max="65535"
-                    required
-                  />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Rathole server port on panel (IP: {window.location.hostname})</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Token (Optional - Auto-generated if empty)
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                    {t.tunnels.remoteIP}
                   </label>
                   <input
                     type="text"
-                    value={formData.rathole_token}
+                    value={formData.remote_ip}
                     onChange={(e) =>
-                      setFormData({ ...formData, rathole_token: e.target.value })
+                      setFormData({ ...formData, remote_ip: e.target.value || '127.0.0.1' })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                    placeholder="Leave empty for auto-generation"
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                    placeholder="127.0.0.1 or [2001:db8::1]"
                   />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Authentication token (will be auto-generated if not provided)</p>
-                </div>
-              </div>
-            </>
-          )}
-
-          {formData.core === 'chisel' && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Ports
-                </label>
-                <input
-                  type="text"
-                  value={formData.ports}
-                  onChange={(e) =>
-                    setFormData({ ...formData, ports: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder="8080,8081,8082"
-                  required
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Ports (comma-separated, same for reverse port and local port)
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Control Port
-                </label>
-                <input
-                  type="number"
-                  value={formData.chisel_control_port}
-                  onChange={(e) =>
-                    setFormData({ ...formData, chisel_control_port: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder={`${(parseInt(formData.ports.split(',')[0]?.trim()) || 8080) + 10000} (auto)`}
-                  min="1"
-                  max="65535"
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Chisel server control port (leave empty for auto: first port + 10000)
-                </p>
-              </div>
-            </>
-          )}
-
-          {formData.core === 'frp' && (
-            <>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Bind Port
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.frp_bind_port}
-                    onChange={(e) =>
-                      setFormData({ ...formData, frp_bind_port: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                    placeholder="7000"
-                    min="1"
-                    max="65535"
-                    required
-                  />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    FRP server port on panel (default: 7000)
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                    {t.tunnels.remoteIPDescription}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                    {t.tunnels.ports}
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.ports}
+                    onChange={(e) =>
+                      setFormData({ ...formData, ports: e.target.value })
+                    }
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                    placeholder="8080,8081,8082"
+                    required
+                  />
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                    {t.tunnels.portsDescription}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {formData.core === 'backhaul' && (
+              <BackhaulForm
+                state={backhaulState}
+                onChange={(partial) => {
+                  setBackhaulState((prev) => ({ ...prev, ...partial }))
+                  if (partial.transport) {
+                    setFormData((prev) => ({ ...prev, type: partial.transport as string }))
+                  }
+                }}
+                onOpenAdvanced={() => setShowBackhaulAdvanced(true)}
+                acceptUdpVisible={
+                  backhaulState.transport === 'tcp' || backhaulState.transport === 'tcpmux'
+                }
+              />
+            )}
+
+            {formData.core === 'rathole' && (
+              <>
+                <div>
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
                     Ports
                   </label>
                   <input
@@ -1505,70 +1405,197 @@ const AddTunnelModal = ({ nodes, servers, onClose, onSuccess }: AddTunnelModalPr
                     onChange={(e) =>
                       setFormData({ ...formData, ports: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                     placeholder="8080,8081,8082"
                     required
                   />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Ports (comma-separated, same for remote port and local port)
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                    Ports (comma-separated, same for panel and node local service)
                   </p>
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Token (Optional - Auto-generated if empty)
-                </label>
-                <input
-                  type="text"
-                  value={formData.frp_token}
-                  onChange={(e) =>
-                    setFormData({ ...formData, frp_token: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
-                  placeholder="Leave empty for auto-generation"
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Authentication token (will be auto-generated if not provided)</p>
-              </div>
-            </>
-          )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                      Rathole Port
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.rathole_remote_addr}
+                      onChange={(e) =>
+                        setFormData({ ...formData, rathole_remote_addr: e.target.value })
+                      }
+                      className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                      placeholder="23333"
+                      min="1"
+                      max="65535"
+                      required
+                    />
+                    <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">Rathole server port on panel (IP: {window.location.hostname})</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                      Token (Optional - Auto-generated if empty)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.rathole_token}
+                      onChange={(e) =>
+                        setFormData({ ...formData, rathole_token: e.target.value })
+                      }
+                      className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                      placeholder="Leave empty for auto-generation"
+                    />
+                    <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">Authentication token (will be auto-generated if not provided)</p>
+                  </div>
+                </div>
+              </>
+            )}
 
-          {/* v4 to v6 tunnel checkbox - only for Rathole, Backhaul, Chisel, FRP (not GOST) */}
-          {formData.core !== 'gost' && (
-            <>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="v4_to_v6"
-                  checked={formData.use_ipv6}
-                  onChange={(e) => setFormData({ ...formData, use_ipv6: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label htmlFor="v4_to_v6" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  v4 to v6 tunnel
-                </label>
-              </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 -mt-2">
-                Enable this to create a tunnel from IPv4 (iran node) to IPv6 (node/target). Iran node listens on IPv4, target uses IPv6.
-              </p>
-            </>
-          )}
+            {formData.core === 'chisel' && (
+              <>
+                <div>
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                    Ports
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.ports}
+                    onChange={(e) =>
+                      setFormData({ ...formData, ports: e.target.value })
+                    }
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                    placeholder="8080,8081,8082"
+                    required
+                  />
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                    Ports (comma-separated, same for reverse port and local port)
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                    Control Port
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.chisel_control_port}
+                    onChange={(e) =>
+                      setFormData({ ...formData, chisel_control_port: e.target.value })
+                    }
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                    placeholder={`${(parseInt(formData.ports.split(',')[0]?.trim()) || 8080) + 10000} (auto)`}
+                    min="1"
+                    max="65535"
+                  />
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                    Chisel server control port (leave empty for auto: first port + 10000)
+                  </p>
+                </div>
+              </>
+            )}
 
+            {formData.core === 'frp' && (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                      Bind Port
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.frp_bind_port}
+                      onChange={(e) =>
+                        setFormData({ ...formData, frp_bind_port: e.target.value })
+                      }
+                      className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                      placeholder="7000"
+                      min="1"
+                      max="65535"
+                      required
+                    />
+                    <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                      FRP server port on panel (default: 7000)
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                      Ports
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.ports}
+                      onChange={(e) =>
+                        setFormData({ ...formData, ports: e.target.value })
+                      }
+                      className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                      placeholder="8080,8081,8082"
+                      required
+                    />
+                    <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                      Ports (comma-separated, same for remote port and local port)
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
+                    Token (Optional - Auto-generated if empty)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.frp_token}
+                    onChange={(e) =>
+                      setFormData({ ...formData, frp_token: e.target.value })
+                    }
+                    className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
+                    placeholder="Leave empty for auto-generation"
+                  />
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">Authentication token (will be auto-generated if not provided)</p>
+                </div>
+              </>
+            )}
+
+            {/* v4 to v6 tunnel checkbox - only for Rathole, Backhaul, Chisel, FRP (not GOST) */}
+            {formData.core !== 'gost' && (
+              <>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="v4_to_v6"
+                    checked={formData.use_ipv6}
+                    onChange={(e) => setFormData({ ...formData, use_ipv6: e.target.checked })}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label htmlFor="v4_to_v6" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    v4 to v6 tunnel
+                  </label>
+                </div>
+                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
+                  Enable this to create a tunnel from IPv4 (iran node) to IPv6 (node/target). Iran node listens on IPv4, target uses IPv6.
+                </p>
+              </>
+            )}
+
+          </form>
+        </div>
+
+        <div className="p-6 border-t border-white/10 bg-black/20 shrink-0 relative z-10">
           <div className="flex gap-3 justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white rounded-xl transition-all font-bold text-sm border border-white/5 hover:border-white/20"
             >
               {t.tunnels.cancel}
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              form="add-tunnel-form"
+              className="px-5 py-2.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/50 hover:border-cyan-400 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(0,255,255,0.15)] glow-cyan-text text-sm flex items-center gap-2"
             >
+              <Network size={16} />
               {t.tunnels.createTunnel}
             </button>
           </div>
-        </form>
+        </div>
         <BackhaulAdvancedDrawer
           open={showBackhaulAdvanced}
           state={backhaulAdvanced}
@@ -1596,25 +1623,25 @@ function BackhaulForm({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
           Control Port
         </label>
         <input
           type="number"
           value={state.control_port}
           onChange={(e) => onChange({ control_port: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+          className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none"
           placeholder="3080"
           min={1}
           max={65535}
         />
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
           Port where the node connects back to the panel.
         </p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
           Ports
         </label>
         <input
@@ -1623,38 +1650,38 @@ function BackhaulForm({
           onChange={(e) => {
             onChange({ public_port: e.target.value, target_port: e.target.value })
           }}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+          className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none"
           placeholder="8080,8081,8082"
         />
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
           Ports (comma-separated, same for public port and target port)
         </p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-xs font-bold text-white/70 tracking-wider uppercase mb-2">
           Token (Optional - Auto-generated if empty)
         </label>
         <input
           type="text"
           value={state.token}
           onChange={(e) => onChange({ token: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white"
+          className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none"
           placeholder="Leave empty for auto-generation"
         />
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Authentication token (will be auto-generated if not provided)</p>
+        <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">Authentication token (will be auto-generated if not provided)</p>
       </div>
 
       {acceptUdpVisible && (
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-xl">
+          <label className="text-sm font-bold text-white/80">
             Allow UDP over TCP
           </label>
           <input
             type="checkbox"
             checked={state.accept_udp}
             onChange={() => onChange({ accept_udp: !state.accept_udp })}
-            className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+            className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
           />
         </div>
       )}
@@ -1663,8 +1690,9 @@ function BackhaulForm({
         <button
           type="button"
           onClick={onOpenAdvanced}
-          className="px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors w-full justify-center"
         >
+          <Settings size={16} />
           Advanced settings
         </button>
       </div>
@@ -1708,71 +1736,74 @@ function BackhaulAdvancedDrawer({
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex">
-      <div className="flex-1 bg-black bg-opacity-40" onClick={onClose} />
-      <div className="w-full max-w-xl h-full bg-white dark:bg-gray-900 shadow-xl overflow-y-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Backhaul Advanced Settings</h3>
+    <div className="fixed inset-0 z-[110] flex animation-fade-in">
+      <div className="flex-1 bg-black/60 backdrop-blur-sm cursor-pointer" onClick={onClose} />
+      <div className="w-full max-w-2xl h-full glass-panel border-l border-white/10 overflow-hidden flex flex-col shadow-[-10px_0_40px_rgba(0,0,0,0.5)] relative">
+        <div className="p-6 border-b border-white/10 shrink-0 relative z-10 flex justify-between items-center bg-black/20">
+          <h3 className="text-xl font-black text-white glow-cyan-text flex items-center gap-2">
+            <Settings size={20} className="text-cyan-400" />
+            Backhaul Advanced Settings
+          </h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-lg transition-colors border border-transparent hover:border-white/10"
           >
-            Close
+            <X size={20} />
           </button>
         </div>
 
-        <div className="space-y-6">
+        <div className="p-6 space-y-8 overflow-y-auto flex-1 custom-scrollbar relative z-10">
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
+            <h4 className="text-xs font-black text-white/80 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
               Server Options
             </h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Keepalive (s)</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Keepalive (s)</label>
                 <input
                   type="number"
                   value={state.server.keepalive_period}
                   onChange={(e) => updateServer('keepalive_period', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Heartbeat (s)</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Heartbeat (s)</label>
                 <input
                   type="number"
                   value={state.server.heartbeat}
                   onChange={(e) => updateServer('heartbeat', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Channel Size</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Channel Size</label>
                 <input
                   type="number"
                   value={state.server.channel_size}
                   onChange={(e) => updateServer('channel_size', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mux Concurrency</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Mux Concurrency</label>
                 <input
                   type="number"
                   value={state.server.mux_con}
                   onChange={(e) => updateServer('mux_con', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Log Level</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Log Level</label>
                 <select
                   value={state.server.log_level}
                   onChange={(e) => updateServer('log_level', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                 >
                   <option value="panic">panic</option>
                   <option value="fatal">fatal</option>
@@ -1784,134 +1815,134 @@ function BackhaulAdvancedDrawer({
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Web UI Port</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Web UI Port</label>
                 <input
                   type="number"
                   value={state.server.web_port}
                   onChange={(e) => updateServer('web_port', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   placeholder="0 (disable)"
                   min={0}
                 />
               </div>
               <div className="col-span-2 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">Enable Sniffer</label>
+                <label className="text-sm font-medium text-white/80 flex-1 uppercase tracking-wider text-[10px]">Enable Sniffer</label>
                 <input
                   type="checkbox"
                   checked={state.server.sniffer}
                   onChange={() => updateServer('sniffer', !state.server.sniffer)}
-                  className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+                  className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sniffer Log Path</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Sniffer Log Path</label>
                 <input
                   type="text"
                   value={state.server.sniffer_log}
                   onChange={(e) => updateServer('sniffer_log', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   placeholder="/var/log/backhaul.json"
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">TLS Certificate Path</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">TLS Certificate Path</label>
                 <input
                   type="text"
                   value={state.server.tls_cert}
                   onChange={(e) => updateServer('tls_cert', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">TLS Key Path</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">TLS Key Path</label>
                 <input
                   type="text"
                   value={state.server.tls_key}
                   onChange={(e) => updateServer('tls_key', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                 />
               </div>
               <div className="col-span-2 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">Disable Optimizations</label>
+                <label className="text-sm font-medium text-white/80 flex-1 uppercase tracking-wider text-[10px]">Disable Optimizations</label>
                 <input
                   type="checkbox"
                   checked={state.server.skip_optz}
                   onChange={() => updateServer('skip_optz', !state.server.skip_optz)}
-                  className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+                  className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
                 />
               </div>
               <div className="col-span-2 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">Enable Proxy Protocol</label>
+                <label className="text-sm font-medium text-white/80 flex-1 uppercase tracking-wider text-[10px]">Enable Proxy Protocol</label>
                 <input
                   type="checkbox"
                   checked={state.server.proxy_protocol}
                   onChange={() => updateServer('proxy_protocol', !state.server.proxy_protocol)}
-                  className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+                  className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
                 />
               </div>
               <div className="col-span-2 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">TCP Nodelay</label>
+                <label className="text-sm font-medium text-white/80 flex-1 uppercase tracking-wider text-[10px]">TCP Nodelay</label>
                 <input
                   type="checkbox"
                   checked={state.server.nodelay}
                   onChange={() => updateServer('nodelay', !state.server.nodelay)}
-                  className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+                  className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
+            <h4 className="text-xs font-black text-white/80 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
               Client Options
             </h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Connection Pool</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Connection Pool</label>
                 <input
                   type="number"
                   value={state.client.connection_pool}
                   onChange={(e) => updateClient('connection_pool', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Retry Interval (s)</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Retry Interval (s)</label>
                 <input
                   type="number"
                   value={state.client.retry_interval}
                   onChange={(e) => updateClient('retry_interval', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dial Timeout (s)</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Dial Timeout (s)</label>
                 <input
                   type="number"
                   value={state.client.dial_timeout}
                   onChange={(e) => updateClient('dial_timeout', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Keepalive (s)</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Keepalive (s)</label>
                 <input
                   type="number"
                   value={state.client.keepalive_period}
                   onChange={(e) => updateClient('keepalive_period', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   min={1}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Log Level</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Log Level</label>
                 <select
                   value={state.client.log_level}
                   onChange={(e) => updateClient('log_level', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                 >
                   <option value="panic">panic</option>
                   <option value="fatal">fatal</option>
@@ -1923,56 +1954,56 @@ function BackhaulAdvancedDrawer({
                 </select>
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Edge IP (for WS/WSS)</label>
+                <label className="block text-[#8A8F98] text-[10px] uppercase font-bold tracking-wider mb-2">Edge IP (for WS/WSS)</label>
                 <input
                   type="text"
                   value={state.client.edge_ip}
                   onChange={(e) => updateClient('edge_ip', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+                  className="w-full px-4 py-2.5 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 appearance-none [&>option]:bg-gray-900"
                   placeholder="Optional CDN edge IP"
                 />
               </div>
               <div className="col-span-2 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">Aggressive Pool</label>
+                <label className="text-sm font-medium text-white/80 flex-1 uppercase tracking-wider text-[10px]">Aggressive Pool</label>
                 <input
                   type="checkbox"
                   checked={state.client.aggressive_pool}
                   onChange={() => updateClient('aggressive_pool', !state.client.aggressive_pool)}
-                  className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+                  className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
                 />
               </div>
               <div className="col-span-2 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">TCP Nodelay</label>
+                <label className="text-sm font-medium text-white/80 flex-1 uppercase tracking-wider text-[10px]">TCP Nodelay</label>
                 <input
                   type="checkbox"
                   checked={state.client.nodelay}
                   onChange={() => updateClient('nodelay', !state.client.nodelay)}
-                  className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+                  className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
                 />
               </div>
               <div className="col-span-2 flex items-center gap-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">Disable Optimizations</label>
+                <label className="text-sm font-medium text-white/80 flex-1 uppercase tracking-wider text-[10px]">Disable Optimizations</label>
                 <input
                   type="checkbox"
                   checked={state.client.skip_optz}
                   onChange={() => updateClient('skip_optz', !state.client.skip_optz)}
-                  className="h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
+                  className="h-5 w-5 text-cyan-400 bg-black/40 border-white/20 rounded focus:ring-cyan-500 focus:ring-offset-black transition-colors"
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
+            <h4 className="text-xs font-black text-white/80 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
               Custom Ports
             </h4>
             <textarea
               value={state.customPorts}
               onChange={(e) => onChange({ ...state, customPorts: e.target.value })}
-              className="w-full min-h-[120px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-800 dark:text-white"
+              className="w-full min-h-[120px] px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all font-mono text-sm placeholder:text-white/20 custom-scrollbar"
               placeholder={`One entry per line. Examples:\n443\n443=127.0.0.1:8080\n443=[2001:db8::1]:8080\n2000-2100=127.0.0.1:22`}
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1.5">
               Format matches Backhaul ports syntax. Leave empty to use the single public port above.
             </p>
           </div>
