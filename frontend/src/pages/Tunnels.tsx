@@ -265,44 +265,36 @@ const Tunnels = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="relative inline-block mb-4">
-            <div className="absolute inset-0 bg-yellow-500/20 rounded-full blur-xl animate-pulse"></div>
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-t-2 border-yellow-400 relative z-10"></div>
-          </div>
-          <p className="text-gray-400 uppercase tracking-[0.2em] text-sm font-bold glow-yellow/50">{t.tunnels.loadingTunnels}</p>
-        </div>
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <Activity className="text-primary w-8 h-8 animate-pulse" />
+        <p className="text-muted-foreground text-sm font-medium">{t.tunnels.loadingTunnels || "Loading Tunnels..."}</p>
       </div>
     )
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8 bg-black/20 p-6 rounded-2xl border border-white/5 relative overflow-hidden group">
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10 blur-xl"></div>
+    <div className="w-full space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-white tracking-tight uppercase gradient-text drop-shadow-sm mb-1">{t.tunnels.title}</h1>
-          <p className="text-gray-400 text-sm font-medium tracking-wide">{t.tunnels.subtitle}</p>
+          <h1 className="text-3xl font-bold tracking-tight mb-1">{t.tunnels.title}</h1>
+          <p className="text-muted-foreground text-sm">{t.tunnels.subtitle}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleReapplyAll}
             disabled={reapplyingAll}
-            className="group relative overflow-hidden px-5 py-2.5 rounded-xl font-bold bg-white/5 border border-white/10 hover:border-emerald-400/50 transition-all text-gray-300 hover:text-white flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 bg-accent/50 hover:bg-accent text-accent-foreground font-medium rounded-md transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <RotateCw size={18} className={`relative z-10 ${reapplyingAll ? "animate-spin" : ""}`} />
-            <span className="relative z-10">{t.tunnels.reapplyAll}</span>
+            <RotateCw size={16} className={reapplyingAll ? "animate-spin" : ""} />
+            <span>{t.tunnels.reapplyAll}</span>
           </button>
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="group relative overflow-hidden px-5 py-2.5 rounded-xl font-bold bg-white text-black hover:scale-[0.98] transition-all flex items-center gap-2"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors text-sm"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 opacity-0 group-hover:opacity-20 transition-opacity"></div>
-            <Plus size={18} className="relative z-10" />
-            <span className="relative z-10">{t.tunnels.createTunnel}</span>
+            <Plus size={16} />
+            <span>{t.tunnels.createTunnel}</span>
           </button>
         </div>
       </div>
@@ -359,10 +351,10 @@ const Tunnels = () => {
                   {/* Status Badge */}
                   <span
                     className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 ${tunnel.status === 'active'
-                        ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
-                        : tunnel.status === 'error'
-                          ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                      : tunnel.status === 'error'
+                        ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
                       }`}
                   >
                     {tunnel.status}
